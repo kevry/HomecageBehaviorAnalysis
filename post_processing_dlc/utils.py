@@ -266,7 +266,7 @@ def fix_stretch(egocentric_dlc_arr):
 
 
 
-def batch_of_trial(MARKERS_ABOVE_CONFIDENCE, MINIMUM_BATCH_SIZE=5):
+def batch_for_trial(MARKERS_ABOVE_CONFIDENCE, MINIMUM_BATCH_SIZE=5):
     """ find batch of valid frames if it exists.
     not all frames in trial might be valid (animal not at start of trial or leaves early) """
     

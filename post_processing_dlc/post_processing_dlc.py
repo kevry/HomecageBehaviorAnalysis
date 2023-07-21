@@ -134,15 +134,13 @@ class PostAnalysisDLC():
             Main script for post-analyzing DeepLabCut data before running behavior analysis(MotionMapper)
             return data structure
         
-            return:
-            
-            dict() = {
-            "valid_clip": Whether clip is valid for further processing
-            "mat_file": Name of file used
-            "num_of_frames": Number of frames used in clip
-            "original_dlc_arr": original DLC data from mat file
-            "confidence_arr": array of confidence levels for each marker in each frame
-            "processd_dlc_arr": processed DLC data
+            return = {
+                "valid_clip": Whether clip is valid for further processing
+                "mat_file": Name of file used
+                "num_of_frames": Number of frames used in clip
+                "original_dlc_arr": original DLC data from mat file
+                "confidence_arr": array of confidence levels for each marker in each frame
+                "processd_dlc_arr": processed DLC data
             }
         """
         
@@ -210,10 +208,8 @@ class PostAnalysisDLC():
         NOSE2TAIL_MARKERS = (MARKERS_ABOVE_CONFIDENCE[:, :8].sum(axis = 1) > 3) & (MARKERS_ABOVE_CONFIDENCE[:, :8].sum(axis = 1) < 8) & (MARKERS_ABOVE_CONFIDENCE[:, 8:].sum(axis = 1) == 0)
 
         # set markers below confidence threshold to [0,0] 
-        #OG_MARKERS_ABOVE_CONFIDENCE_NT = None
         if np.any(NOSE2TAIL_MARKERS): # autoencoder for nose-tail2 denoising
             normalized_dlc_arr_NT, MARKERS_ABOVE_CONFIDENCE_NT = self.nose2tailAE.run(normalized_dlc_arr.copy(), MARKERS_ABOVE_CONFIDENCE, NOSE2TAIL_MARKERS.copy())
-            #OG_MARKERS_ABOVE_CONFIDENCE_NT = MARKERS_ABOVE_CONFIDENCE_NT.copy()
             assert MARKERS_ABOVE_CONFIDENCE_NT.shape == MARKERS_ABOVE_CONFIDENCE.shape
             assert normalized_dlc_arr_NT.shape == normalized_dlc_arr.shape
             
@@ -272,7 +268,7 @@ class PostAnalysisDLC():
         egocentric_dlc_arr = utils.egocenterALL(dlc_arr_tm_aligned.copy())
         
         # find if batch of valid frames exist
-        create_batch, batch_indexes = utils.batch_of_trial(MARKERS_ABOVE_CONFIDENCE.copy(), MINIMUM_BATCH_SIZE=5)
+        create_batch, batch_indexes = utils.batch_for_trial(MARKERS_ABOVE_CONFIDENCE.copy(), MINIMUM_BATCH_SIZE=5)
 
         if create_batch:
             egocentric_dlc_arr = egocentric_dlc_arr[batch_indexes[0]:batch_indexes[-1]+1]
