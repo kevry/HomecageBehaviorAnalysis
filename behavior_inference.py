@@ -77,23 +77,26 @@ if __name__ == "__main__":
         save2trialmat=False
     )
 
-    # %% Load in post-processed DeepLabCut data
+    # %% Load in and extract post-processed DeepLabCut data
     
     raw_data = np.load(post_analyzed_dlc_file_path)
     projections = raw_data['data']
-    print("Pose data dim:", projections.shape)
+    per_trial_length = raw_data['per_trial_length']
+    mat_files_used = raw_data['mat_files']
     
     projections_flatten = projections.reshape((-1, 36))
-    per_trial_length = raw_data['per_trial_length']
-    del raw_data, projections
+    
     print("Pose data reshaped:", projections_flatten.shape)
+    print("Pose data dim:", projections.shape)
+    
+    del raw_data, projections
     
     # %% Run MotionMapper process
     
     mminfer.run(
         pose_data=projections_flatten, 
         per_trial_length=per_trial_length,
-        mat_files_used=None,
+        mat_files_used=mat_files_used,
         animalRFID=animalRFID, 
         animal_folder=animal_folder,
         sigma=0.5,
