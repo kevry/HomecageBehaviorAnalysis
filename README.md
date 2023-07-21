@@ -10,7 +10,9 @@ To run these scripts, you will need to have Python and install the needed librar
 
 To install using Anaconda:
 
-`conda env create -f environments/conda-env.yml`
+`cd <repo>/environments`
+
+`conda env create -f conda-env.yml`
 
 `conda activate homecagebehaviorENV`
 
