@@ -8,6 +8,7 @@ Embed data into 2D using UMAP algorithm
 
 import numpy as np
 import pickle
+from tqdm import tqdm
 
 class Embed2DUMAP():
     def __init__(self, umap_model_path, scaling_parameters_path, parameters):
@@ -32,14 +33,12 @@ class Embed2DUMAP():
         num_of_batches = len(batch_data)
         batch_zval_list = []
         
-        print('Finding Embeddings')
-        for batch_idx in range(num_of_batches):
-            print("Batch {}/{}".format(str(batch_idx+1), str(num_of_batches)))
+        print('Finding Embeddings w/ UMAP')
+        for batch_idx in tqdm(range(num_of_batches), desc='\tBatch'):
             zval = self.um.transform(batch_data[batch_idx])
             zval = zval - self.trainparams[0]
             zval = zval * self.trainparams[1]
             batch_zval_list.append(zval)
-            
         zVals = np.concatenate(np.array(batch_zval_list), 0)
         return zVals
     
