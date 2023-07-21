@@ -8,22 +8,22 @@ Query all necessary data from datajoint about animal
 """
 
 import datajoint as dj
-import os
 import datetime
+import os
 import pandas as pd
 from tqdm import tqdm
+
+# import config file for db credentials
 import config as cfg
 
 dj.config['database.host'] = cfg.chenlab_datajoint_cred['host']
 dj.config['database.user'] = cfg.chenlab_datajoint_cred['user']
 dj.config['database.password'] = cfg.chenlab_datajoint_cred['password']
 
-# get schema variables
+# get schema variables and spawn missing classes
 experiment_schema = dj.Schema('homecage_experiment')
 subject_schema = dj.Schema('homecage_subject')
 lab_schema = dj.Schema('homecage_lab')
-
-# spawn missing classes
 experiment_schema.spawn_missing_classes()
 lab_schema.spawn_missing_classes()
 subject_schema.spawn_missing_classes()
