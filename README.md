@@ -1,2 +1,2 @@
 # Quantify Behavior
-Utilizing DeepLabCut pose data, quantifying behavior with the MotionMapper algorithm
+Using DeepLabCut pose data, quantifying behavior with the MotionMapper algorithm
