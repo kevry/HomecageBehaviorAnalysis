@@ -69,7 +69,7 @@ class PostAnalysisDLC():
 
         try: # skip entire animal dataset if error occurs
             for mat_file in tqdm(mat_file_list, desc="\tPost-processing data"):  
-                OUTPUT = self.pose_post_processing_per_video_TM(mat_file, CONFIDENCE_THRESH = self.CONFIDENCE_THRESH)
+                OUTPUT = self.pose_post_processing_per_video_TM(mat_file)
         
                 if OUTPUT["valid_clip"]:
                     RAW_SUBJECT_DATA.append(OUTPUT["original_dlc_arr"])
@@ -88,19 +88,15 @@ class PostAnalysisDLC():
             print("\tError with {}. Skipping to next set".format(animalRFID))
             traceback.print_exc()
             return None
+
+        # # create error trial information
+        # mat_file_path = os.path.join(animal_folder, "ERROR_TRIALS_POST.mat")
+        # savemat(mat_file_path, {"errormark": ERROR_TRIALS})
         
-        ######################################
-        
-        # create error trial information
-        mat_file_path = os.path.join(animal_folder, "ERROR_TRIALS_POST.mat")
-        savemat(mat_file_path, {"errormark": ERROR_TRIALS})
-        
-        # create error trial information
-        mat_file_path = os.path.join(animal_folder, "ERROR_TRIALS2_POST.mat")
-        savemat(mat_file_path, {"errorconf": ERROR_TRIALS2})
-        
-        ############################################
-        
+        # # create error trial information
+        # mat_file_path = os.path.join(animal_folder, "ERROR_TRIALS2_POST.mat")
+        # savemat(mat_file_path, {"errorconf": ERROR_TRIALS2})
+
         if save2trialmat:
             # save processed data into mat files used
             for i, mat_file in enumerate(tqdm(MAT_FILES_USED, desc="\tSaving data to mat files")):
@@ -133,7 +129,7 @@ class PostAnalysisDLC():
         return npz_file_path
         
 
-    def pose_post_processing_per_video_TM(self, mat_file, CONFIDENCE_THRESH):
+    def pose_post_processing_per_video_TM(self, mat_file):
         """ 
             Main script for post-analyzing DeepLabCut data before running behavior analysis(MotionMapper)
             return data structure
@@ -182,7 +178,7 @@ class PostAnalysisDLC():
         normalized_dlc_arr[:,:,1] = normalized_dlc_arr[:,:,1]/original_frame_dims[1]
         
         # boolean matrix with markers above confidence threshold
-        MARKERS_ABOVE_CONFIDENCE = dlc_confidence_arr >= CONFIDENCE_THRESH
+        MARKERS_ABOVE_CONFIDENCE = dlc_confidence_arr >= self.CONFIDENCE_THRESH
         
         # search for frames that are "valid" meaning there are >= 4 markers with high confidence
         VALID_FRAME_ARR = MARKERS_ABOVE_CONFIDENCE.sum(axis=1) >= 4
