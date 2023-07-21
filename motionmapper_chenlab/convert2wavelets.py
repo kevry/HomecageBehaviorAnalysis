@@ -21,8 +21,8 @@ def convert2wavelets(projections, per_trial_length, parameters):
     
     batch_wavelet_list = []
     for batch_idx in range(len(batch_projections)):
-        print("Batch {}/{}".format(str(batch_idx+1), str(num_of_batches)))
-        print("Pose data shape:", batch_projections[batch_idx].shape)
+        print("\tBatch {}/{}".format(str(batch_idx+1), str(num_of_batches)))
+        print("\tPose data shape:", batch_projections[batch_idx].shape)
         batch_wavelet, f = mmpy.mm_findWaveletsChenLab(batch_projections[batch_idx], batch_per_trial_lengths[batch_idx], parameters.pcaModes, parameters)
         batch_wavelet = batch_wavelet / np.sum(batch_wavelet, 1)[:, None]
         batch_wavelet_list.append(batch_wavelet)
