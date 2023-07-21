@@ -58,8 +58,7 @@ if __name__ == "__main__":
     
     start_time = time.time()
     
-    # %% Get all trials from DataJoint. Save all trials with matching .mat file into found_trials.csv and missing trials into missing_trials.csv
-    
+    # %% Get all trials from respective animal on DataJoint
     found_trials_csv_path = extract_trials_datajoint(
         animalRFID=animalRFID, 
         animal_folder=animal_folder, 
@@ -68,7 +67,6 @@ if __name__ == "__main__":
     )
     
     # %% Post-Processing DeepLabCut data for downstream behavior analysis
-    
     post_analyzed_dlc_file_path = postdlc.run(
         csv_path=found_trials_csv_path, 
         animalRFID=animalRFID, 
@@ -78,7 +76,6 @@ if __name__ == "__main__":
     )
 
     # %% Load in and extract post-processed DeepLabCut data
-    
     raw_data = np.load(post_analyzed_dlc_file_path)
     projections = raw_data['data']
     per_trial_length = raw_data['per_trial_length']
@@ -92,7 +89,6 @@ if __name__ == "__main__":
     del raw_data, projections
     
     # %% Run MotionMapper process
-    
     mminfer.run(
         pose_data=projections_flatten, 
         per_trial_length=per_trial_length,
