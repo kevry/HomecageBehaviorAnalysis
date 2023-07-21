@@ -13,6 +13,7 @@ import numpy as np
 def get_watershed_regions(embedded2ddata, watershed_file_path, behavior_labeled_look_up_table_inverted):
     """ get watershed regions of each data point """
 
+    print("Finding watershedRegions for each data point")
     wshedfile = hdf5storage.loadmat(watershed_file_path)
     LL = wshedfile['LL']
     xx = wshedfile['xx'][0]

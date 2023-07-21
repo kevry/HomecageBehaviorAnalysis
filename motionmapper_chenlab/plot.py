@@ -6,15 +6,14 @@ Created on Tue Jul 18 14:24:07 2023
 Plot results
 """
 
-import sys
-import os
 import matplotlib.pyplot as plt
-
 import numpy as np
+import os
+import sys
 sys.path.append(r"Z:\Dropbox\Dropbox\Chen Lab Team Folder\Projects\Home_Cage_Training\DeepLabCut\BehaviorAnalysis\motionmapperpy")
 import motionmapperpy as mmpy
 
-def create_plot(data, animalRFID, ANIMAL_FOLDER, sigma = 0.1, c_limit=0.95):
+def create_plot(data, animalRFID, animal_folder, sigma = 0.1, c_limit=0.95):
     """ create scatter plot and heatmap for animal specific data """
 
     m = np.abs(data).max()
@@ -32,6 +31,6 @@ def create_plot(data, animalRFID, ANIMAL_FOLDER, sigma = 0.1, c_limit=0.95):
 
     axes[1].set_title('%0.02f, %0.02f'%(sigma, c_limit))
 
-    plot_path = os.path.join(ANIMAL_FOLDER, "HEATMAP.png")
+    plot_path = os.path.join(animal_folder, "HEATMAP.png")
     print("Created heatmap plot for {}!".format(animalRFID))
     fig.savefig(plot_path)

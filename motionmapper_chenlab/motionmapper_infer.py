@@ -87,7 +87,7 @@ class MotionMapperInference():
             watershedRegions = get_watershed_regions(embedded2ddata, self.watershed_file_path, self.BEHAVIOR_LABELED_LOOK_UP_TABLE_INVERTED)
             if save_progress:
                 savemat(mat_file_path, {"data": watershedRegions})
-                print("\tSaved wavelets to WATERSHEDREGIONS.mat for {}".format(animalRFID)) 
+                print("\tSaved watershedregions to WATERSHEDREGIONS.mat for {}".format(animalRFID)) 
         print("\tWatershedRegions dim:", watershedRegions.shape)
         
         if save2trialmat:
