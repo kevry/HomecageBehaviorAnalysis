@@ -187,11 +187,11 @@ class PostAnalysisDLC():
             OUTPUT["MARKERS_ABOVE_CONFIDENCE"] = MARKERS_ABOVE_CONFIDENCE
             return OUTPUT
         
-        # front cutoff
-        FRONT_CUTOFF_IDX = utils.search_front_cutoff(bool_arr=VALID_FRAME_ARR.copy())
+        # # front cutoff
+        # FRONT_CUTOFF_IDX = utils.search_front_cutoff(bool_arr=VALID_FRAME_ARR.copy())
         
-        # get cutoff of trial
-        END_CUTOFF_IDX = utils.search_cutoff(bool_arr = VALID_FRAME_ARR.copy())
+        # # get cutoff of trial
+        # END_CUTOFF_IDX = utils.search_cutoff(bool_arr = VALID_FRAME_ARR.copy())
         
         # # trim data past cutoff point
         # MARKERS_ABOVE_CONFIDENCE = MARKERS_ABOVE_CONFIDENCE[FRONT_CUTOFF_IDX:END_CUTOFF_IDX]

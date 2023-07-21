@@ -99,7 +99,7 @@ if __name__ == "__main__":
         mat_files_used=mat_files_used,
         animalRFID=animalRFID, 
         animal_folder=animal_folder,
-        sigma=0.5,
+        sigma=0.8,
         save_progress=True,
         save2trialmat=False
     )

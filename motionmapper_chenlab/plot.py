@@ -3,6 +3,7 @@
 Created on Tue Jul 18 14:24:07 2023
 
 @author: Kevin Delgado
+
 Plot results
 """
 
@@ -29,8 +30,8 @@ def create_plot(data, animalRFID, animal_folder, sigma = 0.1, c_limit=0.95):
     _ = axes[1].imshow(density, cmap=mmpy.gencmap(), extent=(xx[0], xx[-1], xx[0], xx[-1]), 
               origin='lower', vmax=np.max(density)*c_limit)
 
-    axes[1].set_title('%0.02f, %0.02f'%(sigma, c_limit))
+    axes[1].set_title('Sigma: %0.02f'%(sigma))
 
     plot_path = os.path.join(animal_folder, "HEATMAP.png")
-    print("Created heatmap plot for {}!".format(animalRFID))
+    print("Created heatmap for {} data!".format(animalRFID))
     fig.savefig(plot_path)
