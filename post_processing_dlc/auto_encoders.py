@@ -8,7 +8,6 @@ Autoencoder classes used in post processing analysis
 
 import tensorflow as tf
 import numpy as np
-from skimage import transform
 from post_processing_dlc import utils
 
 

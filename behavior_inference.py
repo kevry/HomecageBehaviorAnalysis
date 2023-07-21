@@ -28,33 +28,30 @@ if __name__ == "__main__":
     from extract_trials_datajoint import extract_trials_datajoint
     from post_processing_dlc.post_processing_dlc import PostAnalysisDLC
     import config as cfg
-    
-    auto_encoder_model_path = cfg .motion_mapper_file_paths["auto_encoder_model_path"]
-    scaling_parameters_path = cfg.motion_mapper_file_paths["scaling_parameters_path"]
-    umap_model_path = cfg.motion_mapper_file_paths["umap_model_path"]
-    look_up_table_path = cfg.motion_mapper_file_paths["look_up_table_path"]
-    watershed_file_path = cfg.motion_mapper_file_paths["watershed_file_path"]
-    processing_folder = cfg.processing_folder
-    
+  
     # animal RFID
     animalRFID = "000C95218038"
     #animalRFID = get_args()
     
     # create animal folder
-    animal_folder = os.path.join(processing_folder, animalRFID)
+    animal_folder = os.path.join(cfg.processing_folder, animalRFID)
     os.makedirs(animal_folder, exist_ok=True)
     
     # create instance of MotionMapperInference object
     mminfer = MotionMapperInference(
-        umap_model_path=umap_model_path, 
-        auto_encoder_model_path=auto_encoder_model_path, 
-        scaling_parameters_path=scaling_parameters_path,
-        look_up_table_path=look_up_table_path,
-        watershed_file_path=watershed_file_path
+        umap_model_path=cfg.motion_mapper_file_paths["umap_model_path"], 
+        auto_encoder_model_path=cfg.motion_mapper_file_paths["auto_encoder_model_path"], 
+        scaling_parameters_path=cfg.motion_mapper_file_paths["scaling_parameters_path"],
+        look_up_table_path=cfg.motion_mapper_file_paths["look_up_table_path"],
+        watershed_file_path=cfg.motion_mapper_file_paths["watershed_file_path"]
     )
     
     # create instance of Post-Process DLC object
-    postdlc = PostAnalysisDLC()
+    postdlc = PostAnalysisDLC(
+        nose2tail_ae_path=cfg.post_processing_dlc_paths["nose2tail_ae_path"], 
+        feet_ae_path=cfg.post_processing_dlc_paths["feet_ae_path"], 
+        all_ae_path=cfg.post_processing_dlc_paths["all_ae_path"]
+    )
     
     start_time = time.time()
     

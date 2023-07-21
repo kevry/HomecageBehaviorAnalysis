@@ -19,9 +19,12 @@ from post_processing_dlc import utils
 
 
 class PostAnalysisDLC():
-    def __init__(self, CONFIDENCE_THRESH=0.7):
+    def __init__(self, nose2tail_ae_path, feet_ae_path, all_ae_path, CONFIDENCE_THRESH=0.7):
         """ initialize post processing class """
         
+        self.nose2tail_ae_path = nose2tail_ae_path
+        self.feet_ae_path = feet_ae_path
+        self.all_ae_path = all_ae_path
         self.CONFIDENCE_THRESH = CONFIDENCE_THRESH
         self.initialize_autoencoders()
         
@@ -29,13 +32,9 @@ class PostAnalysisDLC():
     def initialize_autoencoders(self):
         """ initialize autoencoders used in post processing """
         
-        nose2tail_ae_path = r"Z:\Dropbox\Dropbox\Chen Lab Team Folder\Projects\Home_Cage_Training\DeepLabCut\Autoencoders\VERSION1\tm_nose_2_tail_markers_ae.h5"
-        feet_ae_path = r"Z:\Dropbox\Dropbox\Chen Lab Team Folder\Projects\Home_Cage_Training\DeepLabCut\Autoencoders\VERSION1\tm_feet_markers_ae.h5"
-        all_ae_path = r"Z:\Dropbox\Dropbox\Chen Lab Team Folder\Projects\Home_Cage_Training\DeepLabCut\Autoencoders\VERSION1\all_tm_markers_ae.h5"
-
-        self.nose2tailAE = Nose2TailAutoEncoder(nose2tail_ae_path)
-        self.feetAE = FeetAutoEncoder(feet_ae_path)
-        self.allmarkerAE = AllMarkerAutoEncoder(all_ae_path)
+        self.nose2tailAE = Nose2TailAutoEncoder(self.nose2tail_ae_path)
+        self.feetAE = FeetAutoEncoder(self.feet_ae_path)
+        self.allmarkerAE = AllMarkerAutoEncoder(self.all_ae_path)
 
 
     def run(self, csv_path, animalRFID, animal_folder, overwrite=False, save2trialmat=False):
