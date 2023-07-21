@@ -1,4 +1,4 @@
-name: behaviorinference
+name: homecagebehaviorENV
 channels:
   - defaults
 dependencies:
