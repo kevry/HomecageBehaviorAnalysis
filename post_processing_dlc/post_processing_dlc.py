@@ -103,15 +103,22 @@ class PostAnalysisDLC():
         
         if save2trialmat:
             # save processed data into mat files used
-            for i, mat_file in enumerate(tqdm(MAT_FILES_USED, desc="\tSaving data")):
+            for i, mat_file in enumerate(tqdm(MAT_FILES_USED, desc="\tSaving data to mat files")):
                 # load in mat file data
                 mat_file = utils.linux2windowspath(mat_file)
                 matdata = loadmat(mat_file)
                 
                 # append egocentric data and start/end indices into mat file
+                matdata["post_processed_success"] = True
                 matdata["egocentricwTM"] = SUBJECT_DATA[i]
                 matdata["egocentric_start_end_index"] = PROCESSED_START_END_INDEXES_PER_TRIAL[i]
                 savemat(mat_file, matdata)
+                
+            for i, mat_file in enumerate(tqdm(MAT_FILES_NOT_USED, desc="\tMarking mat files not used")):
+                # load in mat file data
+                mat_file = utils.linux2windowspath(mat_file)
+                matdata = loadmat(mat_file)
+                matdata["post_processed_success"] = False
             
         # concatenate data into long array
         RAW_SUBJECT_DATA = np.concatenate(RAW_SUBJECT_DATA, axis=0)
