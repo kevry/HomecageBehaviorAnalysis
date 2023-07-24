@@ -1,38 +1,34 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Jul 18 11:00:38 2023
-
 @author: Kevin Delgado
-
-Convert projections to wavelets
+Convert projections into wavelets (spatial temporal)
 """
-import sys
+
+from motionmapper_chenlab.mmfunctions import findWaveletsChenLab
 import numpy as np
-sys.path.append(r"Z:\Dropbox\Dropbox\Chen Lab Team Folder\Projects\Home_Cage_Training\DeepLabCut\BehaviorAnalysis\motionmapperpy")
-import motionmapperpy as mmpy
+from tqdm import tqdm
 
-
-def convert2wavelets(projections, per_trial_length, parameters):
-    """ convert data into wavelets """
+def wavelet_transform(projections, per_trial_length, parameters):
+    """ transform data into wavelets """
     
     print("Finding Wavelets.")
-    batch_projections, batch_per_trial_lengths = data2trialbatches(projections, per_trial_length)
-    num_of_batches = len(batch_projections)
+    batch_projections, batch_per_trial_lengths = convert_2_trial_batches(projections, per_trial_length)
     
     batch_wavelet_list = []
-    for batch_idx in range(len(batch_projections)):
-        print("\tBatch {}/{}".format(str(batch_idx+1), str(num_of_batches)))
-        print("\tPose data shape:", batch_projections[batch_idx].shape)
-        batch_wavelet, f = mmpy.mm_findWaveletsChenLab(batch_projections[batch_idx], batch_per_trial_lengths[batch_idx], parameters.pcaModes, parameters)
+    for batch_idx in tqdm(range(len(batch_projections)), desc='\tBatch'):
+        batch_wavelet, f = findWaveletsChenLab(batch_projections[batch_idx], batch_per_trial_lengths[batch_idx], 
+                                               parameters.pcaModes, parameters.omega0, parameters.numPeriods,
+                                               parameters.samplingFreq, parameters.maxF, parameters.minF, parameters.numProcessors,
+                                               parameters.useGPU)
         batch_wavelet = batch_wavelet / np.sum(batch_wavelet, 1)[:, None]
         batch_wavelet_list.append(batch_wavelet)
-    
     wavelets = np.concatenate(np.array(batch_wavelet_list), 0)
     return wavelets
 
 
-def data2trialbatches(projections, per_trial_length, MAX_BATCH_SIZE = 25000):
-    """ split data into individual batches based on trial lengths to not overload RAM """
+def convert_2_trial_batches(projections, per_trial_length, MAX_BATCH_SIZE = 25000):
+    """ split data into individual batches based on the trial lengths ... to not overload RAM """
     
     # split data into batches
     num_of_frames_batch = 0 

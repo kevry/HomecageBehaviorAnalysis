@@ -1,24 +1,24 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Jul 19 10:34:57 2023
-
 @author: Kevin Delgado
-
 Container for MotionMapper process
 """
 
-import os
-import numpy as np
-from scipy.io import loadmat, savemat
-import pickle
-from tqdm import tqdm
 import datetime
-from motionmapper_chenlab.embed2d import Embed2DUMAP
-from motionmapper_chenlab.auto_encoder import AE_Encoder
+import numpy as np
+import os
+import pickle
+from scipy.io import loadmat, savemat
+from tqdm import tqdm
+
 from motionmapper_chenlab.parameters import parameters
-from motionmapper_chenlab.convert2wavelets import convert2wavelets
+from motionmapper_chenlab.auto_encoder import AE_Encoder
+from motionmapper_chenlab.wavelet_transform import wavelet_transform
+from motionmapper_chenlab.embed2d import Embed2DUMAP
 from motionmapper_chenlab.watershedregions import get_watershed_regions
-from motionmapper_chenlab.plot import create_plot
+from motionmapper_chenlab.draw_plot import draw_plot
+
 from post_processing_dlc.utils import linux2windowspath
 
 
@@ -31,10 +31,10 @@ class MotionMapperInference():
         self.auto_encoder_model_path = auto_encoder_model_path
         self.watershed_file_path = watershed_file_path
 
-        self.umapmodel = Embed2DUMAP(self.umap_model_path, scaling_parameters_path, parameters)
         self.encoder = AE_Encoder(model_path=self.auto_encoder_model_path)
+        self.umapmodel = Embed2DUMAP(self.umap_model_path, scaling_parameters_path, parameters)
         
-        # created watershed look-up table
+        # initialize watershed look-up table
         with open(look_up_table_path, 'rb') as f:
             BEHAVIOR_LABELED_LOOK_UP_TABLE = pickle.load(f)
         self.BEHAVIOR_LABELED_LOOK_UP_TABLE_INVERTED = {}
@@ -42,7 +42,7 @@ class MotionMapperInference():
             for region in BEHAVIOR_LABELED_LOOK_UP_TABLE[globalregion]:
                 self.BEHAVIOR_LABELED_LOOK_UP_TABLE_INVERTED[str(region)] = int(globalregion)
         print("Loaded behavior labeled look-up table")
-            
+        
         
     def run(self, pose_data, per_trial_length, mat_files_used, animalRFID, animal_folder, sigma=0.8, save_progress=False, save2trialmat=False):
         """ run MotionMapper inference for data """
@@ -62,7 +62,7 @@ class MotionMapperInference():
         if os.path.exists(mat_file_path):
             wavelets = loadmat(mat_file_path)["data"]
         else:
-            wavelets = convert2wavelets(encoded_pose_data, per_trial_length, parameters)
+            wavelets = wavelet_transform(encoded_pose_data, per_trial_length, parameters)
             if save_progress:
                 savemat(mat_file_path, {"data": wavelets})
                 print("\tSaved wavelets to WAVELETS.mat for {}".format(animalRFID)) 
@@ -78,7 +78,7 @@ class MotionMapperInference():
                 print("\tSaved embedded 2D data to UMAP2D.mat for {}".format(animalRFID))
         print("\tEmbedded data dim:", embedded2ddata.shape)
         
-        create_plot(embedded2ddata, animalRFID, animal_folder, sigma=sigma)
+        draw_plot(embedded2ddata, animalRFID, animal_folder, sigma=sigma)
     
         mat_file_path = os.path.join(animal_folder, "WATERSHEDREGIONS.mat")
         if os.path.exists(mat_file_path):

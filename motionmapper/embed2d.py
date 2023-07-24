@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Jul 18 13:20:47 2023
-
 @author: Kevin Delgado
 Embed data into 2D using UMAP algorithm
 """
@@ -28,7 +27,7 @@ class Embed2DUMAP():
     def inference(self, data):
         """ embed data into 2D using model """
         
-        batch_data = self.data2batches(data)
+        batch_data = self.convert_to_batches(data)
         
         num_of_batches = len(batch_data)
         batch_zval_list = []
@@ -43,7 +42,7 @@ class Embed2DUMAP():
         return zVals
     
     
-    def data2batches(self, data, MAX_SIZE = 10000):
+    def convert_to_batches(self, data, MAX_SIZE = 10000):
         """ split up data into batches of size MAX_SIZE for tracking 
         note: 10,0000 seems the best at the moment for quick tracking of progress embedding data """
         

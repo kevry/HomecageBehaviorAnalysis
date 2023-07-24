@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Jul 17 16:18:01 2023
-
 @author: Kevin Delgado
-
-AutoEncoder model for post-analysis
+Autoencoder utilized for dimensionality reduction of original pose data time series
 """
 
 import tensorflow as tf
@@ -26,7 +24,8 @@ class AE_Encoder():
         self.AEencoder = tf.keras.models.Model(inputs=AE.input, outputs=AE.layers[1].output)
         
     def inference(self, data):
-        """ encode data """
+        """ reduce dimensionality of data using autoencoder"""
+        
         print('\tEncoding pose data.')
         encoded_data = self.AEencoder.predict(data, verbose=1)
         return encoded_data

@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Jul 17 16:38:08 2023
+Written by (Gorden Berman lab): 
+Kanishk Jain
+kanishkbjain@gmail.com
 
-@author: Kevin Delgado
-
-MotionMapper Parameters
+Modified by (Jerry Chen Lab):
+Kevin Delgado
+thekevry@gmail.com
 """
-import sys
-sys.path.append(r"Z:\Dropbox\Dropbox\Chen Lab Team Folder\Projects\Home_Cage_Training\DeepLabCut\BehaviorAnalysis\motionmapperpy")
-import motionmapperpy as mmpy
+
+from motionmapper_chenlab.mmfunctions import setRunParameters
 
 #% Load the default parameters.
-parameters = mmpy.setRunParameters() 
+parameters = setRunParameters() 
 
 # %%%%%%% PARAMETERS TO CHANGE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # These need to be revised everytime you are working with a new dataset. #
 
 parameters.projectPath = None #% Full path to the project directory.
-
 
 parameters.method = 'UMAP' #% We can choose between 'TSNE' or 'UMAP'
 
@@ -55,11 +55,13 @@ parameters.trainingSetSize = 100000000   #% Total number of training set points 
 parameters.embedding_batchSize = 30000  #% Lower this if you get a memory error when 
                                         #% re-embedding points on a learned map.
     
-######################### CUSTOM #############################
+    
+# %%%%%%% CUSTOM Parameters FOR CHENLAB CODE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 parameters.chenlab_tm_data = True
 parameters.waveletDecomp = True
 parameters.trainingPerc = 0.5
-#############################################################
+
 
 # %%%%%%% tSNE parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
