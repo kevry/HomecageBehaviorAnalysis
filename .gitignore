@@ -6,8 +6,12 @@ __pycache__/
 # C extensions
 *.so
 
-# do not push config.py
-config.py
+# do not push scc json and log files files
+scc/jsons/
+scc/log/
+
+# do not push config files(except for template)
+configs/*.yaml
 
 # Distribution / packaging
 .Python
