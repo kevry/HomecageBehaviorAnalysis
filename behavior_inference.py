@@ -48,67 +48,53 @@ if __name__ == "__main__":
     start_time = time.time()
     
     # %% Animal information
-    animalRFID_list = [
-        "000C9522B10A",
-        "000C9522C17A",
-        "000C9522C279",
-        "000C9522C378",
-        "000C9522C873",
-        "000C9522D06B",
-        "000C9522D76C",
-        "000C9522E259",
-        "000C9522E853",
-    ]
+    animalRFID = get_args()
     
-    #animalRFID = get_args()
+    # create animal folder
+    animal_folder = os.path.join(cfg.processing_folder, animalRFID)
+    os.makedirs(animal_folder, exist_ok=True)
     
-    for animalRFID in animalRFID_list:
-    
-        # create animal folder
-        animal_folder = os.path.join(cfg.processing_folder, animalRFID)
-        os.makedirs(animal_folder, exist_ok=True)
-        
-        # Get all trials from respective animal on DataJoint
-        found_trials_csv_path = extract_trials_datajoint(
-            animalRFID=animalRFID, 
-            animal_folder=animal_folder, 
-            save_missing_trials=False, 
-            overwrite=True
-        )
+    # Get all trials from respective animal on DataJoint
+    found_trials_csv_path = extract_trials_datajoint(
+        animalRFID=animalRFID, 
+        animal_folder=animal_folder, 
+        save_missing_trials=False, 
+        overwrite=True
+    )
     
     # %% Post-Processing DeepLabCut data for downstream behavior analysis
-    # post_analyzed_dlc_file_path = postdlc.run(
-    #     csv_path=found_trials_csv_path, 
-    #     animalRFID=animalRFID, 
-    #     animal_folder=animal_folder,
-    #     overwrite=True,
-    #     save2trialmat=False
-    # )
+    post_analyzed_dlc_file_path = postdlc.run(
+        csv_path=found_trials_csv_path, 
+        animalRFID=animalRFID, 
+        animal_folder=animal_folder,
+        overwrite=True,
+        save2trialmat=False
+    )
 
-    # # %% Load in and extract post-processed DeepLabCut data
-    # raw_data = np.load(post_analyzed_dlc_file_path)
-    # projections = raw_data['data']
-    # per_trial_length = raw_data['per_trial_length']
-    # mat_files_used = raw_data['mat_files']
+    # %% Load in and extract post-processed DeepLabCut data
+    raw_data = np.load(post_analyzed_dlc_file_path)
+    projections = raw_data['data']
+    per_trial_length = raw_data['per_trial_length']
+    mat_files_used = raw_data['mat_files']
     
-    # projections_flatten = projections.reshape((-1, 36))
+    projections_flatten = projections.reshape((-1, 36))
     
-    # print("Pose data reshaped:", projections_flatten.shape)
-    # print("Pose data dim:", projections.shape)
+    print("Pose data reshaped:", projections_flatten.shape)
+    print("Pose data dim:", projections.shape)
     
-    # del raw_data, projections
+    del raw_data, projections
     
-    # # %% Run MotionMapper process
-    # mminfer.run(
-    #     pose_data=projections_flatten, 
-    #     per_trial_length=per_trial_length,
-    #     mat_files_used=mat_files_used,
-    #     animalRFID=animalRFID, 
-    #     animal_folder=animal_folder,
-    #     sigma=0.9,
-    #     save_progress=True,
-    #     save2trialmat=False
-    # )
+    # %% Run MotionMapper process
+    mminfer.run(
+        pose_data=projections_flatten, 
+        per_trial_length=per_trial_length,
+        mat_files_used=mat_files_used,
+        animalRFID=animalRFID, 
+        animal_folder=animal_folder,
+        sigma=0.9,
+        save_progress=True,
+        save2trialmat=False
+    )
     
-    # # %%
-    # print("Elapsed time:", time.time() - start_time)
+    # %%
+    print("Elapsed time:", time.time() - start_time)
