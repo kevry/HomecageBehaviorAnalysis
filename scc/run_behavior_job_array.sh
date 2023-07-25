@@ -13,8 +13,8 @@
 #$ -l h_rt=12:00:00
 
 #path to configuration file
-config_file_path=$1
+config_file_name=$1
 
 module load python3
-python collect_animal_data_helper.py --config_file_path config_file_path
+python collect_animal_data_helper.py --config_file_name config_file_name
 exit
