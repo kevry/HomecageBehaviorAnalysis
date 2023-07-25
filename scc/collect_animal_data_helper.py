@@ -15,23 +15,24 @@ import yaml
 def get_args():
     """ gets arguments from command line """
     parser = argparse.ArgumentParser(
-        description="Parsing argument for animal ID",
-        epilog="python file.py --config_file_path configs/config_test.yaml"
+        description="Getting configuration file for further analysis",
+        epilog="python file.py --config_file_name config_test.yaml"
     )
     # required argument
-    parser.add_argument("--config_file_path", '-cfg', required=True, help='Full path to configuration file path')
+    parser.add_argument("--config_file_name", '-cfg', required=True, help='File name of configuration file')
     args = parser.parse_args()
-    return args.config_file_path
-
+    return args.config_file_name
 
 
 if __name__ == "__main__":
     
-    # batch size for each job
+    # number of animals to run analysis per job
     batch_size = 1
     
     # get configuration file path
-    config_file_path = get_args()
+    # note: assuming config file is already in "configs" folder
+    config_file_name = get_args()
+    config_file_path = os.path.join(os.path.dirname(os.path.dirname(os.getcwd())), "configs", config_file_name)
     
     with open(config_file_path, "r") as stream:
         try:
@@ -86,7 +87,7 @@ if __name__ == "__main__":
         "-tc", "50", 
         "-o", log_folder,
         "-e", log_folder,
-        "job.sh", 
+        "behavior_job.sh", 
         json_file_path, #json file path of animal list
         config_file_path #config file path
     ])
