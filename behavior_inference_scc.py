@@ -25,6 +25,47 @@ def get_args():
     return args.json_file_path, args.config_file_path
 
 
+def ospath(path):
+	""" modify file path depending on the current OS in use.
+	this code will sometimes run on Windows environment or SCC(linux) """
+
+	# create hash table of letter network drives and SCC mounted paths
+	map2scc = {
+		'Z:': '/net/claustrum/mnt/data', 
+		'Y:': '/net/claustrum/mnt/data1',
+		'X:': '/net/claustrum2/mnt/data',
+		'W:': '/net/clasutrum3/mnt/data', 
+		'V:': '/net/claustrum4/mnt/storage/data',
+	}
+
+	map2win = {
+		'/net/claustrum/mnt/data': 'Z:', 
+		'/net/claustrum/mnt/data1': 'Y:',
+		'/net/claustrum2/mnt/data': 'X:',
+		'/net/clasutrum3/mnt/data': 'W:', 
+		'/net/claustrum4/mnt/storage/data': 'V:',
+	}
+
+	# running on linux
+	if sys.platform == 'linux':
+		for key in map2scc:
+			if key in path:
+				path = path.replace(key, map2scc[key])
+				break
+		# reverse backslash		
+		path = path.replace('\\', '/')
+	else:
+		# running on windows
+		for key in map2win:
+			if key in path:
+				path = path.replace(key, map2win[key])
+				break
+		path = path.replace('/', '\\')
+
+	return path
+
+
+# %%
 if __name__ == "__main__":
     
     # from extract_trials_datajoint import extract_trials_datajoint
@@ -42,18 +83,18 @@ if __name__ == "__main__":
     
     # create instance of MotionMapperInference object
     mminfer = MotionMapperInference(
-        umap_model_path=cfg["motion_mapper_file_paths"]["umap_model_path"], 
-        auto_encoder_model_path=cfg["motion_mapper_file_paths"]["auto_encoder_model_path"], 
-        scaling_parameters_path=cfg["motion_mapper_file_paths"]["scaling_parameters_path"],
-        look_up_table_path=cfg["motion_mapper_file_paths"]["look_up_table_path"],
-        watershed_file_path=cfg["motion_mapper_file_paths"]["watershed_file_path"]
+        umap_model_path = ospath(path = cfg["motion_mapper_file_paths"]["umap_model_path"]), 
+        auto_encoder_model_path = ospath(path = cfg["motion_mapper_file_paths"]["auto_encoder_model_path"]), 
+        scaling_parameters_path = ospath(path = cfg["motion_mapper_file_paths"]["scaling_parameters_path"]),
+        look_up_table_path = ospath(path = cfg["motion_mapper_file_paths"]["look_up_table_path"]),
+        watershed_file_path = ospath(path = cfg["motion_mapper_file_paths"]["watershed_file_path"])
     )
     
     # create instance of Post-Process DLC object
     postdlc = PostAnalysisDLC(
-        nose2tail_ae_path=cfg["post_processing_dlc_paths"]["nose2tail_ae_path"], 
-        feet_ae_path=cfg["post_processing_dlc_paths"]["feet_ae_path"], 
-        all_ae_path=cfg["post_processing_dlc_paths"]["all_ae_path"]
+        nose2tail_ae_path = ospath(path = cfg["post_processing_dlc_paths"]["nose2tail_ae_path"]), 
+        feet_ae_path = ospath(path = cfg["post_processing_dlc_paths"]["feet_ae_path"]), 
+        all_ae_path = ospath(path = cfg["post_processing_dlc_paths"]["all_ae_path"])
     )
     
     start_time = time.time()
@@ -72,7 +113,7 @@ if __name__ == "__main__":
         print("Analyzing", animalRFID)
         
         # animal folder
-        animal_folder = os.path.join(cfg["processing_folder"], animalRFID)
+        animal_folder = os.path.join(ospath(path = cfg["processing_folder"]), animalRFID)
         
         # queried trial data from datajoint
         found_trials_csv_path = os.path.join(animal_folder, "FOUND_TRIALS.csv")
