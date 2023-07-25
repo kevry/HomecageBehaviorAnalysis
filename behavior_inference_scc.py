@@ -70,7 +70,7 @@ if __name__ == "__main__":
     
     # from extract_trials_datajoint import extract_trials_datajoint
     from post_processing_dlc.post_processing_dlc import PostAnalysisDLC
-    from motionmapper_chenlab.motionmapper_infer import MotionMapperInference
+    from motionmapper.inference import MotionMapperInference
     
     # get configuration file path
     json_file_path, config_file_path = get_args()
