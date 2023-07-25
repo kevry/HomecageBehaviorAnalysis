@@ -9,6 +9,12 @@ __pycache__/
 # do not push scc json and log files files
 scc/jsons/
 scc/log/
+scc/*.sh.o*
+scc/*.sh.po*
+scc/*.sh.e*
+*.sh.o*
+*.sh.po*
+*.sh.e*
 
 # do not push config files(except for template)
 configs/*.yaml
