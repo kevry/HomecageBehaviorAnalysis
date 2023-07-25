@@ -16,5 +16,5 @@
 config_file_name=$1
 
 module load python3
-python collect_animal_data_helper.py --config_file_name config_file_name
+python collect_animal_data_helper.py --config_file_name $config_file_name
 exit
