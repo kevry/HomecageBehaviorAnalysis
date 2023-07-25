@@ -24,4 +24,4 @@ sleep $slptime
 
 #run main python script
 cd ..
-python behavior_inference_scc.py --json_file_name $1 --config_file_path $2
+python behavior_inference_scc.py --json_file_path $1 --config_file_path $2
