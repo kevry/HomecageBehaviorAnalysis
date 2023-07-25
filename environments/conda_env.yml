@@ -25,3 +25,4 @@ dependencies:
     - tensorflow==2.4
     - tqdm==4.65.0
     - umap-learn==0.5.3
+    - pyyaml==5.4
