@@ -32,7 +32,7 @@ if __name__ == "__main__":
     # get configuration file path
     # note: assuming config file is already in "configs" folder
     config_file_name = get_args()
-    config_file_path = os.path.join(os.path.dirname(os.path.dirname(os.getcwd())), "configs", config_file_name)
+    config_file_path = os.path.join(os.path.dirname(os.getcwd()), "configs", config_file_name)
     
     with open(config_file_path, "r") as stream:
         try:
