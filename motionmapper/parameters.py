@@ -9,7 +9,7 @@ Kevin Delgado
 thekevry@gmail.com
 """
 
-from motionmapper_chenlab.mmfunctions import setRunParameters
+from motionmapper.mmfunctions import setRunParameters
 
 #% Load the default parameters.
 parameters = setRunParameters() 

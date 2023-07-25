@@ -5,7 +5,7 @@ Created on Tue Jul 18 11:00:38 2023
 Convert projections into wavelets (spatial temporal)
 """
 
-from motionmapper_chenlab.mmfunctions import findWaveletsChenLab
+from motionmapper.mmfunctions import findWaveletsChenLab
 import numpy as np
 from tqdm import tqdm
 

@@ -12,12 +12,12 @@ import pickle
 from scipy.io import loadmat, savemat
 from tqdm import tqdm
 
-from motionmapper_chenlab.parameters import parameters
-from motionmapper_chenlab.auto_encoder import AE_Encoder
-from motionmapper_chenlab.wavelet_transform import wavelet_transform
-from motionmapper_chenlab.embed2d import Embed2DUMAP
-from motionmapper_chenlab.watershedregions import get_watershed_regions
-from motionmapper_chenlab.draw_plot import draw_plot
+from motionmapper.parameters import parameters
+from motionmapper.auto_encoder import AE_Encoder
+from motionmapper.wavelet_transform import wavelet_transform
+from motionmapper.embed2d import Embed2DUMAP
+from motionmapper.watershedregions import get_watershed_regions
+from motionmapper.draw_plot import draw_plot
 
 from post_processing_dlc.utils import linux2windowspath
 

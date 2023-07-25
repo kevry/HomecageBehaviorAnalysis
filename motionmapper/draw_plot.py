@@ -8,7 +8,7 @@ plot scatterplot and heatmap of data
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from motionmapper_chenlab.mmfunctions import findPointDensity, gencmap
+from motionmapper.mmfunctions import findPointDensity, gencmap
 
 def draw_plot(data, animalRFID, animal_folder, sigma = 0.1, c_limit=0.95):
     """ create scatter plot and heatmap for data """
