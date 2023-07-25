@@ -13,22 +13,6 @@ import os
 import pandas as pd
 from tqdm import tqdm
 
-# import config file for db credentials
-import config as cfg
-
-dj.config['database.host'] = cfg.chenlab_datajoint_cred['host']
-dj.config['database.user'] = cfg.chenlab_datajoint_cred['user']
-dj.config['database.password'] = cfg.chenlab_datajoint_cred['password']
-
-# get schema variables and spawn missing classes
-experiment_schema = dj.Schema('homecage_experiment')
-subject_schema = dj.Schema('homecage_subject')
-lab_schema = dj.Schema('homecage_lab')
-experiment_schema.spawn_missing_classes()
-lab_schema.spawn_missing_classes()
-subject_schema.spawn_missing_classes()
-
-
 def get_mat_file_path(training_module_id, trial_datetime):
     """ get full path to trial mat file using training module id and trial datetime """
     
@@ -83,10 +67,21 @@ def get_mat_file_path(training_module_id, trial_datetime):
     
 
 
-def extract_trials_datajoint(animalRFID, animal_folder, save_missing_trials=True, overwrite=False):
+def extract_trials_datajoint(animalRFID, animal_folder, datajoint_credentials, save_missing_trials=True, overwrite=False):
     """ get all trials with respective .mat files from DataJoint """
-    
     print("Extracting trials with respective mat file from database.")
+
+    dj.config['database.host'] = datajoint_credentials['host']
+    dj.config['database.user'] = datajoint_credentials['user']
+    dj.config['database.password'] = datajoint_credentials['password']
+
+    # get schema variables and spawn missing classes
+    experiment_schema = dj.Schema('homecage_experiment')
+    subject_schema = dj.Schema('homecage_subject')
+    lab_schema = dj.Schema('homecage_lab')
+    experiment_schema.spawn_missing_classes()
+    lab_schema.spawn_missing_classes()
+    subject_schema.spawn_missing_classes()
     
     found_csv_path = os.path.join(animal_folder, "FOUND_TRIALS.csv")
     if overwrite == True:
@@ -135,6 +130,11 @@ def extract_trials_datajoint(animalRFID, animal_folder, save_missing_trials=True
         print("\tCreated FOUND_TRIALS.csv for {}!".format(animalRFID))
         
     return found_csv_path
+
+
+
+if __name__ == "__main__":
+    pass
         
         
         
