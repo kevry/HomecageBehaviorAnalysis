@@ -14,7 +14,7 @@
 
 #activate conda environment
 module load miniconda
-conda activate VideoAnalysisENV
+conda activate homecagebehaviorENV
 
 #handle hdf5 files on scc
 export HDF5_USE_FILE_LOCKING='FALSE'
