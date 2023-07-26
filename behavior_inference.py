@@ -19,9 +19,9 @@ def get_args():
         epilog="python file.py --config_file_path configs/config_test.yaml"
     )
     # required argument
-    parser.add_argument("--config_file_path", '-cfg', required=True, help='Full path to configuration file path')
+    parser.add_argument("--config_file_name", '-cfg', required=True, help='Name of configuration file')
     args = parser.parse_args()
-    return args.config_file_path
+    return args.config_file_name
 
 
 def ospath(path):
@@ -72,9 +72,9 @@ if __name__ == "__main__":
     from motionmapper.inference import MotionMapperInference
     
     # get configuration file path
-    config_file_path = get_args()
+    config_file_name = get_args()
     
-    with open(config_file_path, "r") as stream:
+    with open(os.path.join(os.getcwd(), 'configs', config_file_name), "r") as stream:
         try:
             cfg = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
