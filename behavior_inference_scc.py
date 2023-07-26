@@ -27,7 +27,7 @@ def get_args():
     parser.add_argument("--json_file_name", '-jfp', required=True, help='Name of json file with animal list')
     parser.add_argument("--config_file_name", '-cfg', required=True, help='Name of config file with configurations')
     args = parser.parse_args()
-    return args.json_file_path, args.config_file_path
+    return args.json_file_name, args.config_file_name
 
 
 def ospath(path):
