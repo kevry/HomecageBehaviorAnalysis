@@ -24,8 +24,8 @@ def get_args():
         epilog="python file.py --config_file_path configs/config_test.yaml"
     )
     # required argument
-    parser.add_argument("--json_file_path", '-jfp', required=True, help='Full path to json animal list')
-    parser.add_argument("--config_file_path", '-cfg', required=True, help='Full path to configuration file path')
+    parser.add_argument("--json_file_name", '-jfp', required=True, help='Name of json file with animal list')
+    parser.add_argument("--config_file_name", '-cfg', required=True, help='Name of config file with configurations')
     args = parser.parse_args()
     return args.json_file_path, args.config_file_path
 
@@ -76,9 +76,9 @@ if __name__ == "__main__":
     print(os.getcwd())
     
     # get configuration file path
-    json_file_path, config_file_path = get_args()
+    json_file_name, config_file_name = get_args()
     
-    with open(config_file_path, "r") as stream:
+    with open(os.path.join(os.getcwd(), "configs", config_file_name), "r") as stream:
         try:
             cfg = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     # %% Animal information
     
     # load in JSON file
-    f = open(json_file_path)
+    f = open(os.path.join(os.getcwd(), "scc", "jsons", json_file_name))
     data = json.load(f)
     f.close()
  

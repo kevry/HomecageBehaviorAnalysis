@@ -23,12 +23,12 @@ slptime=$(echo "scale=4 ; ($RANDOM/32768) * 10" | bc)
 sleep $slptime
 
 #json file path
-json_file_path=$1
+json_file_name=$1
 
 #configuration file path
-config_file_path=$2
+config_file_name=$2
 
 #run main python script
 cd ..
-python behavior_inference_scc.py --json_file_path $json_file_path --config_file_path $config_file_path
+python behavior_inference_scc.py --json_file_name $json_file_name --config_file_name $config_file_name
 exit

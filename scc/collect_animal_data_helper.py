@@ -70,6 +70,7 @@ if __name__ == "__main__":
     with open(json_file_path, "w") as outfile:
         outfile.write(json_obj)
     print("{} created.".format(json_file_path))
+    json_file_name = os.path.basename(json_file_path)
     
     num_of_jobs = len(animal_list_chunked)
     
@@ -88,8 +89,8 @@ if __name__ == "__main__":
         "-o", log_folder,
         "-e", log_folder,
         "behavior_job.sh", 
-        json_file_path, #json file path of animal list
-        config_file_path#config file path
+        json_file_name, #json file path of animal list
+        config_file_name#config file path
     ])
 
     
