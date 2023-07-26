@@ -89,7 +89,7 @@ if __name__ == "__main__":
         "-e", log_folder,
         "behavior_job.sh", 
         json_file_path, #json file path of animal list
-        config_file_path #config file path
+        config_file_path#config file path
     ])
 
     

@@ -14,6 +14,7 @@ import traceback
 import numpy as np
 from scipy.io import loadmat, savemat
 from scipy import signal
+
 from post_processing_dlc.auto_encoders import Nose2TailAutoEncoder, FeetAutoEncoder, AllMarkerAutoEncoder
 from post_processing_dlc import utils
 

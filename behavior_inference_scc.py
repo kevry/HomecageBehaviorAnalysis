@@ -12,6 +12,11 @@ import sys
 import time
 import yaml
 
+from extract_trials_datajoint import extract_trials_datajoint
+from post_processing_dlc.post_processing_dlc import PostAnalysisDLC
+from motionmapper.inference import MotionMapperInference
+
+
 def get_args():
     """ gets arguments from command line """
     parser = argparse.ArgumentParser(
@@ -68,9 +73,7 @@ def ospath(path):
 # %%
 if __name__ == "__main__":
     
-    # from extract_trials_datajoint import extract_trials_datajoint
-    from post_processing_dlc.post_processing_dlc import PostAnalysisDLC
-    from motionmapper.inference import MotionMapperInference
+    print(os.getcwd())
     
     # get configuration file path
     json_file_path, config_file_path = get_args()

@@ -22,6 +22,13 @@ export HDF5_USE_FILE_LOCKING='FALSE'
 slptime=$(echo "scale=4 ; ($RANDOM/32768) * 10" | bc)
 sleep $slptime
 
+#json file path
+json_file_path=$1
+
+#configuration file path
+config_file_path=$2
+
 #run main python script
 cd ..
-python behavior_inference_scc.py --json_file_path $1 --config_file_path $2
+python behavior_inference_scc.py --json_file_path $json_file_path --config_file_path $config_file_path
+exit
