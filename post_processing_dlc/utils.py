@@ -7,7 +7,7 @@ Created on Thu Jul 20 13:23:29 2023
 Utilities section for post processing analysis of DeepLabCut data
 """
 
-
+import sys
 import numpy as np
 from skimage import transform
 from scipy.interpolate import InterpolatedUnivariateSpline
@@ -231,13 +231,43 @@ def egocentermouse(h5):
 
 
 def linux2windowspath(file_path):
-    """ convert SCC/Linux path to path on Windows
-    NOTE: this function assumes mat files are on Z drive """
+	""" modify file path depending on the current OS in use.
+	this code will sometimes run on Windows environment or SCC(linux) """
     
-    if "/net/claustrum/mnt/data" in file_path:
-        file_path = file_path.replace("/net/claustrum/mnt/data", "Z:")
-        file_path = file_path.replace("/", "\\")
-    return file_path
+	# create hash table of letter network drives and SCC mounted paths
+	map2scc = {
+		'Z:': '/net/claustrum/mnt/data', 
+		'Y:': '/net/claustrum/mnt/data1',
+		'X:': '/net/claustrum2/mnt/data',
+		'W:': '/net/clasutrum3/mnt/data', 
+		'V:': '/net/claustrum4/mnt/storage/data',
+	}
+
+	map2win = {
+		'/net/claustrum/mnt/data': 'Z:', 
+		'/net/claustrum/mnt/data1': 'Y:',
+		'/net/claustrum2/mnt/data': 'X:',
+		'/net/clasutrum3/mnt/data': 'W:', 
+		'/net/claustrum4/mnt/storage/data': 'V:',
+	}
+
+	# running on linux
+	if sys.platform == 'linux':
+		for key in map2scc:
+			if key in file_path:
+				file_path = file_path.replace(key, map2scc[key])
+				break
+		# reverse backslash		
+		file_path = file_path.replace('\\', '/')
+	else:
+		# running on windows
+		for key in map2win:
+			if key in file_path:
+				file_path = file_path.replace(key, map2win[key])
+				break
+		file_path = file_path.replace('/', '\\')
+
+	return file_path
 
 
 
