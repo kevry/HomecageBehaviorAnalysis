@@ -11,6 +11,7 @@ import datajoint as dj
 import datetime
 import os
 import pandas as pd
+import stat
 from tqdm import tqdm
 
 def get_mat_file_path(training_module_id, trial_datetime):
@@ -120,11 +121,13 @@ def extract_trials_datajoint(animalRFID, animal_folder, datajoint_credentials, s
     found_csv_path = os.path.join(animal_folder, "FOUND_TRIALS.csv")
     df = pd.DataFrame(trials_found, columns=["trial_datetime", "mat_file_path"])
     df.to_csv(found_csv_path, index=False)
+    os.chmod(found_csv_path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
     
     if save_missing_trials:
         missing_csv_path = os.path.join(animal_folder, "MISSING_TRIALS.csv")
         df = pd.DataFrame(trials_missing, columns=["trial_datetime", "mat_file_path"])
         df.to_csv(missing_csv_path, index=False)
+        os.chmod(missing_csv_path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
         print("\tCreated FOUND_TRIALS.csv and MISSING_TRIALS.csv for {}!".format(animalRFID))
     else:
         print("\tCreated FOUND_TRIALS.csv for {}!".format(animalRFID))

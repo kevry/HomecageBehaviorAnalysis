@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 from motionmapper.mmfunctions import findPointDensity, gencmap
+import stat
 
 def draw_plot(data, animalRFID, animal_folder, sigma = 0.1, c_limit=0.95):
     """ create scatter plot and heatmap for data """
@@ -28,5 +29,6 @@ def draw_plot(data, animalRFID, animal_folder, sigma = 0.1, c_limit=0.95):
 
     plot_file_path = os.path.join(animal_folder, "HEATMAP.png")
     fig.savefig(plot_file_path)
+    os.chmod(plot_file_path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
     print("Created heatmap for {} data!".format(animalRFID))
     return

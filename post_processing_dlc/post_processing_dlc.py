@@ -14,6 +14,7 @@ import traceback
 import numpy as np
 from scipy.io import loadmat, savemat
 from scipy import signal
+import stat
 
 from post_processing_dlc.auto_encoders import Nose2TailAutoEncoder, FeetAutoEncoder, AllMarkerAutoEncoder
 from post_processing_dlc import utils
@@ -110,12 +111,15 @@ class PostAnalysisDLC():
                 matdata["egocentricwTM"] = SUBJECT_DATA[i]
                 matdata["egocentric_start_end_index"] = PROCESSED_START_END_INDEXES_PER_TRIAL[i]
                 savemat(mat_file, matdata)
+                os.chmod(mat_file, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
                 
             for i, mat_file in enumerate(tqdm(MAT_FILES_NOT_USED, desc="\tMarking mat files not used")):
                 # load in mat file data
                 mat_file = utils.linux2windowspath(mat_file)
                 matdata = loadmat(mat_file)
                 matdata["post_processed_success"] = False
+                savemat(mat_file, matdata)
+                os.chmod(mat_file, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
             
         # concatenate data into long array
         RAW_SUBJECT_DATA = np.concatenate(RAW_SUBJECT_DATA, axis=0)
@@ -126,6 +130,7 @@ class PostAnalysisDLC():
         npz_file_path = os.path.join(animal_folder, "POST_ANALYZED_DLC.npz")
         np.savez(npz_file_path, data=SUBJECT_DATA, per_trial_length=NUM_OF_FRAMES_PER_TRIAL, 
                   mat_files=MAT_FILES_USED, raw=RAW_SUBJECT_DATA, conf=RAW_SUBJECT_CONFIDENCE)
+        os.chmod(npz_file_path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
         print("\tCreated POST_ANALYZED_DLC.npz file for {}!".format(animalRFID))
         return npz_file_path
         

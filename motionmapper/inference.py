@@ -10,6 +10,7 @@ import numpy as np
 import os
 import pickle
 from scipy.io import loadmat, savemat
+import stat
 from tqdm import tqdm
 
 from motionmapper.parameters import parameters
@@ -55,6 +56,7 @@ class MotionMapperInference():
             encoded_pose_data = self.encoder.inference(pose_data)
             if save_progress:
                 savemat(mat_file_path, {"data": encoded_pose_data})
+                os.chmod(mat_file_path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
                 print("\tSaved encoded pose data to ENCODED_POSE_DATA.mat for {}".format(animalRFID))
         print("\tEncoded pose data dim:", encoded_pose_data.shape)
         
@@ -65,6 +67,7 @@ class MotionMapperInference():
             wavelets = wavelet_transform(encoded_pose_data, per_trial_length, parameters)
             if save_progress:
                 savemat(mat_file_path, {"data": wavelets})
+                os.chmod(mat_file_path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
                 print("\tSaved wavelets to WAVELETS.mat for {}".format(animalRFID)) 
         print("\tWavelet dim:", wavelets.shape)
         
@@ -75,6 +78,7 @@ class MotionMapperInference():
             embedded2ddata = self.umapmodel.inference(wavelets)
             if save_progress:
                 savemat(mat_file_path, {"data": embedded2ddata})
+                os.chmod(mat_file_path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
                 print("\tSaved embedded 2D data to UMAP2D.mat for {}".format(animalRFID))
         print("\tEmbedded data dim:", embedded2ddata.shape)
         
@@ -87,6 +91,7 @@ class MotionMapperInference():
             watershedRegions = get_watershed_regions(embedded2ddata, self.watershed_file_path, self.BEHAVIOR_LABELED_LOOK_UP_TABLE_INVERTED)
             if save_progress:
                 savemat(mat_file_path, {"data": watershedRegions})
+                os.chmod(mat_file_path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
                 print("\tSaved watershedregions to WATERSHEDREGIONS.mat for {}".format(animalRFID)) 
         print("\tWatershedRegions dim:", watershedRegions.shape)
         
@@ -110,4 +115,5 @@ class MotionMapperInference():
                 matdata["motion_mapper_analyzed"] = "motion_mapper_v1"
                 matdata["motion_mapper_analyzed_date"] = datetime.datetime.today()
                 savemat(mat_file, matdata)
+                os.chmod(mat_file, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
         return 
