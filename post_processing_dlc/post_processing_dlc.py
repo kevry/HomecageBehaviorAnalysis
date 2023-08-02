@@ -169,7 +169,7 @@ class PostAnalysisDLC():
         # create output ditionary
         OUTPUT = {
             "valid_clip": True,
-            "mat_file": os.path.basename(mat_file),
+            "mat_file": mat_file,
             "num_of_frames": 0,
             "original_dlc_arr": dlc_arr,
             "confidence_arr": dlc_confidence_arr,
