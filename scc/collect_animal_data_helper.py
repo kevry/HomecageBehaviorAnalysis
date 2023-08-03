@@ -12,6 +12,8 @@ import subprocess
 import sys
 import yaml
 
+import ChenLabPyLib
+
 def get_args():
     """ gets arguments from command line """
     parser = argparse.ArgumentParser(
@@ -44,7 +46,7 @@ if __name__ == "__main__":
     animal_list = cfg["animal_list"]
     
     # get processing folder
-    processing_folder = cfg["processing_folder"]
+    processing_folder = ChenLabPyLib.chenlab_filepaths(path=cfg["processing_folder"])
     
     if len(animal_list) <= 0:
         raise ValueError("No animals listed in configuration file.")
