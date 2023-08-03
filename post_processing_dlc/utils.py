@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Jul 20 13:23:29 2023
-
 @author: Kevin Delgado
-
 Utilities section for post processing analysis of DeepLabCut data
 """
 

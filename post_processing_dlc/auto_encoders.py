@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Jul 20 13:22:27 2023
-
 @author: Kevin Delgado
 Autoencoder classes used in post processing analysis
 """
