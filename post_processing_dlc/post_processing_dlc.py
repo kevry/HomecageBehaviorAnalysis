@@ -39,7 +39,7 @@ class PostAnalysisDLC():
         self.allmarkerAE = AllMarkerAutoEncoder(self.all_ae_path)
 
 
-    def run(self, csv_path, animalRFID, animal_folder, overwrite=False, save2trialmat=False):
+    def run(self, csv_path, animalRFID, animal_folder, overwrite=False, save2trialmat=False, disable_progressbar=False):
         """ run post-processing on DeepLabCut data """
         print("\nPost-Processing DeepLabCut data.")
         
@@ -70,7 +70,7 @@ class PostAnalysisDLC():
         MAT_FILES_NOT_USED = []
 
         try: # skip entire animal dataset if error occurs
-            for mat_file in tqdm(mat_file_list, desc="\tPost-processing data"):  
+            for mat_file in tqdm(mat_file_list, desc="\tPost-processing data", disable=disable_progressbar):  
                 OUTPUT = self.pose_post_processing_per_video_TM(mat_file)
         
                 if OUTPUT["valid_clip"]:

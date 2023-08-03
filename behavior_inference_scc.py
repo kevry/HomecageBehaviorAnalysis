@@ -90,7 +90,8 @@ if __name__ == "__main__":
             animalRFID=animalRFID, 
             animal_folder=animal_folder,
             overwrite=True,
-            save2trialmat=False
+            save2trialmat=False,
+            disable_progressbar=True
         )
     
         # %% Load in and extract post-processed DeepLabCut data
