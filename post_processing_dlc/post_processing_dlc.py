@@ -83,7 +83,7 @@ class PostAnalysisDLC():
                 else:
                     ERROR_TRIALS.append(OUTPUT["MARKERS_ABOVE_CONFIDENCE"])
                     ERROR_TRIALS2.append(OUTPUT["confidence_arr"])
-                    MAT_FILES_NOT_USED.append(mat_file)
+                    MAT_FILES_NOT_USED.append(OUTPUT["mat_file"])
                     
             print("\n\t{}/{} clips used".format(len(MAT_FILES_USED), len(mat_file_list)))
         except:
