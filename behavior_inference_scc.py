@@ -99,7 +99,7 @@ if __name__ == "__main__":
         per_trial_length = raw_data['per_trial_length']
         mat_files_used = raw_data['mat_files']
         
-        projections_flatten = projections.reshape((-1, 36))
+        projections_flatten = projections.reshape((-1, projections.shape[1]*projections.shape[2]))
         
         print("Pose data reshaped:", projections_flatten.shape)
         print("Pose data dim:", projections.shape)
