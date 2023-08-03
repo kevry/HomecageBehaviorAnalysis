@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Jul 17 15:01:17 2023
-
 @author: Kevin Delgado
 """
 
@@ -84,7 +83,7 @@ if __name__ == "__main__":
             animalRFID=animalRFID, 
             animal_folder=animal_folder,
             save_missing_trials=False, 
-            overwrite=True
+            overwrite=False
         )
         
         # # %% Post-Processing DeepLabCut data for downstream behavior analysis
