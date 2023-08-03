@@ -29,7 +29,7 @@ def get_args():
 # %%
 if __name__ == "__main__":
     
-    from extract_trials_datajoint import extract_trials_datajoint
+    
     from post_processing_dlc.post_processing_dlc import PostAnalysisDLC
     from motionmapper.inference import MotionMapperInference
     
@@ -41,6 +41,14 @@ if __name__ == "__main__":
             cfg = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
             sys.exit(exc)
+            
+            
+    # import datajoint and credentials
+    import datajoint as dj
+    dj.config['database.host'] = cfg["datajoint_credentials"]['host']
+    dj.config['database.user'] = cfg["datajoint_credentials"]['user']
+    dj.config['database.password'] = cfg["datajoint_credentials"]['password']
+    from extract_trials_datajoint import extract_trials_datajoint
     
     # create instance of MotionMapperInference object
     mminfer = MotionMapperInference(
@@ -75,47 +83,46 @@ if __name__ == "__main__":
         found_trials_csv_path = extract_trials_datajoint(
             animalRFID=animalRFID, 
             animal_folder=animal_folder,
-            datajoint_credentials=cfg["datajoint_credentials"],
             save_missing_trials=False, 
             overwrite=True
         )
         
-        # %% Post-Processing DeepLabCut data for downstream behavior analysis
-        post_analyzed_dlc_file_path = postdlc.run(
-            csv_path=found_trials_csv_path, 
-            animalRFID=animalRFID, 
-            animal_folder=animal_folder,
-            overwrite=True,
-            save2trialmat=True
-        )
+        # # %% Post-Processing DeepLabCut data for downstream behavior analysis
+        # post_analyzed_dlc_file_path = postdlc.run(
+        #     csv_path=found_trials_csv_path, 
+        #     animalRFID=animalRFID, 
+        #     animal_folder=animal_folder,
+        #     overwrite=True,
+        #     save2trialmat=True
+        # )
     
-        # %% Load in and extract post-processed DeepLabCut data
-        raw_data = np.load(post_analyzed_dlc_file_path)
-        projections = raw_data['data']
-        per_trial_length = raw_data['per_trial_length']
-        mat_files_used = raw_data['mat_files']
+        # # %% Load in and extract post-processed DeepLabCut data
+        # raw_data = np.load(post_analyzed_dlc_file_path)
+        # projections = raw_data['data']
+        # per_trial_length = raw_data['per_trial_length']
+        # mat_files_used = raw_data['mat_files']
         
-        projections_flatten = projections.reshape((-1, 36))
+        # projections_flatten = projections.reshape((-1, 36))
         
-        print("Pose data reshaped:", projections_flatten.shape)
-        print("Pose data dim:", projections.shape)
+        # print("Pose data reshaped:", projections_flatten.shape)
+        # print("Pose data dim:", projections.shape)
         
-        del raw_data, projections
+        # del raw_data, projections
         
-        # %% Run MotionMapper process
-        mminfer.run(
-            pose_data=projections_flatten, 
-            per_trial_length=per_trial_length,
-            mat_files_used=mat_files_used,
-            animalRFID=animalRFID, 
-            animal_folder=animal_folder,
-            sigma=0.9,
-            save_progress=True,
-            save2trialmat=True
-        )
+        # # %% Run MotionMapper process
+        # mminfer.run(
+        #     pose_data=projections_flatten, 
+        #     per_trial_length=per_trial_length,
+        #     mat_files_used=mat_files_used,
+        #     animalRFID=animalRFID, 
+        #     animal_folder=animal_folder,
+        #     sigma=0.9,
+        #     save_progress=True,
+        #     save2trialmat=True
+        # )
         
-        # %%
-        print("Elapsed time:", time.time() - start_time)
+        # # %%
+        # print("Elapsed time:", time.time() - start_time)
         
-        # %% Send Slack Notification when finished
-        ChenLabPyLib.send_slack_notification(message="MotionMapper inference w/ {} finished".format(animalRFID))
+        # # %% Send Slack Notification when finished
+        # ChenLabPyLib.send_slack_notification(message="MotionMapper inference w/ {} finished".format(animalRFID))
