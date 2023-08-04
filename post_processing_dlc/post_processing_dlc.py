@@ -109,7 +109,11 @@ class PostAnalysisDLC():
                 matdata["egocentricwTM"] = SUBJECT_DATA[i]
                 matdata["egocentric_start_end_index"] = PROCESSED_START_END_INDEXES_PER_TRIAL[i]
                 savemat(mat_file, matdata)
-                os.chmod(mat_file, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
+                
+                try: # attempt to chmod 777, continue even if fails
+                    os.chmod(mat_file, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
+                except:
+                    pass
                 
             for i, mat_file in enumerate(tqdm(MAT_FILES_NOT_USED, desc="\tMarking mat files not used", disable=disable_progressbar)):
                 # load in mat file data
@@ -117,7 +121,11 @@ class PostAnalysisDLC():
                 matdata = loadmat(mat_file)
                 matdata["post_processed_success"] = False
                 savemat(mat_file, matdata)
-                os.chmod(mat_file, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
+                
+                try: # attempt to chmod 777, continue even if fails
+                    os.chmod(mat_file, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
+                except:
+                    pass
             
         # concatenate data into long array
         RAW_SUBJECT_DATA = np.concatenate(RAW_SUBJECT_DATA, axis=0)

@@ -116,5 +116,9 @@ class MotionMapperInference():
                 matdata["motion_mapper_analyzed_ver"] = self.version
                 matdata["motion_mapper_analyzed_date"] = datetime.datetime.today()
                 savemat(mat_file, matdata)
-                os.chmod(mat_file, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
+                
+                try: # attempt to chmod 777, continue even if fails
+                    os.chmod(mat_file, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
+                except:
+                    pass
         return 
