@@ -99,7 +99,7 @@ def extract_trials_datajoint(animalRFID, animal_folder, save_missing_trials=True
         print("\tNo trials found for {} in database".format(animalRFID))
         return None
     
-    training_module_id = (Session & 'session_datetime = "{}"'.format(trial_list[0]['session_datetime'])).fetch(as_dict=True)[0]['training_module_id']
+    training_module_id = (Session & 'subject = "{}"'.format(animalRFID)).fetch(as_dict=True)[0]['training_module_id']
     
     print("\t-- {} --".format(animalRFID))
     print("\tTraining Module ID:", str(training_module_id))
