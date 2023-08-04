@@ -69,7 +69,7 @@ if __name__ == "__main__":
     
     # %% Animal information
     
-    animalRFIDlist = cfg["animal_list"]
+    animalRFIDlist = [str(animalRFID)for animalRFID in cfg["animal_list"]] # make sure all RFIDs are strings
     
     for animalRFID in animalRFIDlist:
         print("Analyzing", animalRFID)

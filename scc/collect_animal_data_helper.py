@@ -43,7 +43,7 @@ if __name__ == "__main__":
             sys.exit(exc)
             
     # get animal list from cfg file
-    animal_list = cfg["animal_list"]
+    animal_list = [str(animalRFID)for animalRFID in cfg["animal_list"]] 
     
     # get processing folder
     processing_folder = ChenLabPyLib.chenlab_filepaths(path=cfg["processing_folder"])

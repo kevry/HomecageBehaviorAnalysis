@@ -68,7 +68,7 @@ if __name__ == "__main__":
     f.close()
  
     task_id = int(os.environ["SGE_TASK_ID"])
-    animalRFIDlist = data[task_id-1]
+    animalRFIDlist = [str(animalRFID)for animalRFID in data[task_id-1]] # make sure all RFIDs are strings
     
     for animalRFID in animalRFIDlist:
         print("Analyzing", animalRFID)
