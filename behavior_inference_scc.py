@@ -90,7 +90,7 @@ if __name__ == "__main__":
             animalRFID=animalRFID, 
             animal_folder=animal_folder,
             overwrite=True,
-            save2trialmat=False,
+            save2trialmat=True,
             disable_progressbar=True
         )
     
@@ -116,7 +116,8 @@ if __name__ == "__main__":
             animal_folder=animal_folder,
             sigma=0.9,
             save_progress=True,
-            save2trialmat=False
+            save2trialmat=True,
+            disable_progressbar=True
         )
         
         # %%

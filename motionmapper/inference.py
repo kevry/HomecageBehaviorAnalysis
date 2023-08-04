@@ -45,7 +45,7 @@ class MotionMapperInference():
         print("Loaded behavior labeled look-up table")
         
         
-    def run(self, pose_data, per_trial_length, mat_files_used, animalRFID, animal_folder, sigma=0.8, save_progress=False, save2trialmat=False):
+    def run(self, pose_data, per_trial_length, mat_files_used, animalRFID, animal_folder, sigma=0.8, save_progress=False, save2trialmat=False, disable_progressbar=False):
         """ run MotionMapper inference for data """
         
         print("Running MotionMapper inference.")
@@ -103,7 +103,7 @@ class MotionMapperInference():
             watershedRegions_batched = np.split(watershedRegions, np.cumsum(per_trial_length)[:-1])
             assert len(encoded_pose_data_batched) == len(wavelets_batched) == len(embedded2ddata_batched) == len(watershedRegions_batched) == len(mat_files_used)
             
-            for i in tqdm(range(len(per_trial_length)), desc="\tSaving MotionMapper data"):
+            for i in tqdm(range(len(per_trial_length)), desc="\tSaving MotionMapper data", disable=disable_progressbar):
                 mat_file = linux2windowspath(mat_files_used[i])
                 matdata = loadmat(mat_file)
                 matdata["encoded_egocentricwTM"] = encoded_pose_data_batched[i]

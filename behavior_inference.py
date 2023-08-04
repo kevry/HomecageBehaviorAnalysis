@@ -86,42 +86,44 @@ if __name__ == "__main__":
             overwrite=False
         )
         
-        # # %% Post-Processing DeepLabCut data for downstream behavior analysis
-        # post_analyzed_dlc_file_path = postdlc.run(
-        #     csv_path=found_trials_csv_path, 
-        #     animalRFID=animalRFID, 
-        #     animal_folder=animal_folder,
-        #     overwrite=True,
-        #     save2trialmat=True
-        # )
+        # %% Post-Processing DeepLabCut data for downstream behavior analysis
+        post_analyzed_dlc_file_path = postdlc.run(
+            csv_path=found_trials_csv_path, 
+            animalRFID=animalRFID, 
+            animal_folder=animal_folder,
+            overwrite=True,
+            save2trialmat=True,
+            disable_progressbar=True
+        )
     
-        # # %% Load in and extract post-processed DeepLabCut data
-        # raw_data = np.load(post_analyzed_dlc_file_path)
-        # projections = raw_data['data']
-        # per_trial_length = raw_data['per_trial_length']
-        # mat_files_used = raw_data['mat_files']
+        # %% Load in and extract post-processed DeepLabCut data
+        raw_data = np.load(post_analyzed_dlc_file_path)
+        projections = raw_data['data']
+        per_trial_length = raw_data['per_trial_length']
+        mat_files_used = raw_data['mat_files']
         
-        # projections_flatten = projections.reshape((-1, projections.shape[1]*projections.shape[2]))
+        projections_flatten = projections.reshape((-1, projections.shape[1]*projections.shape[2]))
         
-        # print("Pose data reshaped:", projections_flatten.shape)
-        # print("Pose data dim:", projections.shape)
+        print("Pose data reshaped:", projections_flatten.shape)
+        print("Pose data dim:", projections.shape)
         
-        # del raw_data, projections
+        del raw_data, projections
         
-        # # %% Run MotionMapper process
-        # mminfer.run(
-        #     pose_data=projections_flatten, 
-        #     per_trial_length=per_trial_length,
-        #     mat_files_used=mat_files_used,
-        #     animalRFID=animalRFID, 
-        #     animal_folder=animal_folder,
-        #     sigma=0.9,
-        #     save_progress=True,
-        #     save2trialmat=True
-        # )
+        # %% Run MotionMapper process
+        mminfer.run(
+            pose_data=projections_flatten, 
+            per_trial_length=per_trial_length,
+            mat_files_used=mat_files_used,
+            animalRFID=animalRFID, 
+            animal_folder=animal_folder,
+            sigma=0.9,
+            save_progress=True,
+            save2trialmat=True,
+            disable_progressbar=True
+        )
         
-        # # %%
-        # print("Elapsed time:", time.time() - start_time)
+        # %%
+        print("Elapsed time:", time.time() - start_time)
         
-        # # %% Send Slack Notification when finished
-        # ChenLabPyLib.send_slack_notification(message="MotionMapper inference w/ {} finished".format(animalRFID))
+        # %% Send Slack Notification when finished
+        ChenLabPyLib.send_slack_notification(message="MotionMapper inference w/ {} finished".format(animalRFID))
