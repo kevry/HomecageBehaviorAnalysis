@@ -114,7 +114,7 @@ class MotionMapperInference():
                 matdata["umap_model_path"] = self.umap_model_path
                 matdata["autoencoder_model_path"] = self.auto_encoder_model_path
                 matdata["motion_mapper_analyzed_ver"] = self.version
-                matdata["motion_mapper_analyzed_date"] = datetime.datetime.today()
+                matdata["motion_mapper_analyzed_date"] = datetime.datetime.today().strftime('%m/%d/%Y, %H:%M:%S')
                 savemat(mat_file, matdata)
                 
                 try: # attempt to chmod 777, continue even if fails
