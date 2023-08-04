@@ -99,7 +99,7 @@ class PostAnalysisDLC():
 
         if save2trialmat:
             # save processed data into mat files used
-            for i, mat_file in enumerate(tqdm(MAT_FILES_USED, desc="\tSaving data to mat files")):
+            for i, mat_file in enumerate(tqdm(MAT_FILES_USED, desc="\tSaving data to mat files", disable=disable_progressbar)):
                 # load in mat file data
                 mat_file = utils.linux2windowspath(mat_file)
                 matdata = loadmat(mat_file)
@@ -111,7 +111,7 @@ class PostAnalysisDLC():
                 savemat(mat_file, matdata)
                 os.chmod(mat_file, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
                 
-            for i, mat_file in enumerate(tqdm(MAT_FILES_NOT_USED, desc="\tMarking mat files not used")):
+            for i, mat_file in enumerate(tqdm(MAT_FILES_NOT_USED, desc="\tMarking mat files not used", disable=disable_progressbar)):
                 # load in mat file data
                 mat_file = utils.linux2windowspath(mat_file)
                 matdata = loadmat(mat_file)
