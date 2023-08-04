@@ -127,4 +127,4 @@ if __name__ == "__main__":
         # print("Elapsed time:", time.time() - start_time)
         
         # # %% Send Slack Notification when finished
-        # ChenLabPyLib.send_slack_notification(message="MotionMapper inference w/ {} finished".format(animalRFID))
+        # ChenLabPyLib.send_slack_notification(message="MOTIONMAPPER INFERENCE w/ {} finished".format(animalRFID))
