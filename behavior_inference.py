@@ -91,9 +91,9 @@ if __name__ == "__main__":
             csv_path=found_trials_csv_path, 
             animalRFID=animalRFID, 
             animal_folder=animal_folder,
-            overwrite=True,
-            save2trialmat=True,
-            disable_progressbar=True
+            overwrite=cfg['post_processing_dlc_params']['overwrite'],
+            save2trialmat=cfg['post_processing_dlc_params']['save2trialmat'],
+            disable_progressbar=cfg['post_processing_dlc_params']['disable_progressbar']
         )
     
         # %% Load in and extract post-processed DeepLabCut data
@@ -116,10 +116,10 @@ if __name__ == "__main__":
             mat_files_used=mat_files_used,
             animalRFID=animalRFID, 
             animal_folder=animal_folder,
-            sigma=0.9,
-            save_progress=True,
-            save2trialmat=True,
-            disable_progressbar=True
+            sigma=cfg['motion_mapper_inference_params']['sigma'],
+            save_progress=cfg['motion_mapper_inference_params']['save_progress'],
+            save2trialmat=cfg['motion_mapper_inference_params']['save2trialmat'],
+            disable_progressbar=cfg['motion_mapper_inference_params']['disable_progressbar'],
         )
         
         # %%

@@ -48,7 +48,8 @@ if __name__ == "__main__":
         auto_encoder_model_path = ChenLabPyLib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["auto_encoder_model_path"]), 
         scaling_parameters_path = ChenLabPyLib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["scaling_parameters_path"]),
         look_up_table_path = ChenLabPyLib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["look_up_table_path"]),
-        watershed_file_path = ChenLabPyLib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["watershed_file_path"])
+        watershed_file_path = ChenLabPyLib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["watershed_file_path"]),
+        version=cfg['motion_mapper_version']
     )
     
     # create instance of Post-Process DLC object
@@ -84,14 +85,13 @@ if __name__ == "__main__":
             continue
     
         # %% Post-Processing DeepLabCut data for downstream behavior analysis
-        
         post_analyzed_dlc_file_path = postdlc.run(
             csv_path=found_trials_csv_path, 
             animalRFID=animalRFID, 
             animal_folder=animal_folder,
-            overwrite=True,
-            save2trialmat=True,
-            disable_progressbar=True
+            overwrite=cfg['post_processing_dlc_params']['overwrite'],
+            save2trialmat=cfg['post_processing_dlc_params']['save2trialmat'],
+            disable_progressbar=cfg['post_processing_dlc_params']['disable_progressbar']
         )
     
         # %% Load in and extract post-processed DeepLabCut data
@@ -114,10 +114,10 @@ if __name__ == "__main__":
             mat_files_used=mat_files_used,
             animalRFID=animalRFID, 
             animal_folder=animal_folder,
-            sigma=0.9,
-            save_progress=True,
-            save2trialmat=True,
-            disable_progressbar=True
+            sigma=cfg['motion_mapper_inference_params']['sigma'],
+            save_progress=cfg['motion_mapper_inference_params']['save_progress'],
+            save2trialmat=cfg['motion_mapper_inference_params']['save2trialmat'],
+            disable_progressbar=cfg['motion_mapper_inference_params']['disable_progressbar'],
         )
         
         # %%

@@ -20,17 +20,18 @@ from motionmapper.embed2d import Embed2DUMAP
 from motionmapper.watershedregions import get_watershed_regions
 from motionmapper.draw_plot import draw_plot
 
-from post_processing_dlc.utils import linux2windowspath
+import ChenLabPyLib
 
 
 class MotionMapperInference():
-    def __init__(self, umap_model_path, auto_encoder_model_path, scaling_parameters_path, look_up_table_path, watershed_file_path):
+    def __init__(self, umap_model_path, auto_encoder_model_path, scaling_parameters_path, look_up_table_path, watershed_file_path, version):
         """ initialize models used in motionampper process """
         
         print("Initializing MotionMapper inference class.")
         self.umap_model_path = umap_model_path
         self.auto_encoder_model_path = auto_encoder_model_path
         self.watershed_file_path = watershed_file_path
+        self.version = version
 
         self.encoder = AE_Encoder(model_path=self.auto_encoder_model_path)
         self.umapmodel = Embed2DUMAP(self.umap_model_path, scaling_parameters_path, parameters)
@@ -45,12 +46,12 @@ class MotionMapperInference():
         print("Loaded behavior labeled look-up table")
         
         
-    def run(self, pose_data, per_trial_length, mat_files_used, animalRFID, animal_folder, sigma=0.8, save_progress=False, save2trialmat=False, disable_progressbar=False):
+    def run(self, pose_data, per_trial_length, mat_files_used, animalRFID, animal_folder, overwrite=False, save_progress=False, save2trialmat=False, sigma=0.9, disable_progressbar=False):
         """ run MotionMapper inference for data """
         
         print("Running MotionMapper inference.")
         mat_file_path = os.path.join(animal_folder, "ENCODED_POSE_DATA.mat")
-        if os.path.exists(mat_file_path):
+        if os.path.exists(mat_file_path) and overwrite == False:
             encoded_pose_data = loadmat(mat_file_path)["data"]
         else:
             encoded_pose_data = self.encoder.inference(pose_data)
@@ -61,7 +62,7 @@ class MotionMapperInference():
         print("\tEncoded pose data dim:", encoded_pose_data.shape)
         
         mat_file_path = os.path.join(animal_folder, "WAVELETS.mat")
-        if os.path.exists(mat_file_path):
+        if os.path.exists(mat_file_path) and overwrite == False:
             wavelets = loadmat(mat_file_path)["data"]
         else:
             wavelets = wavelet_transform(encoded_pose_data, per_trial_length, parameters)
@@ -72,7 +73,7 @@ class MotionMapperInference():
         print("\tWavelet dim:", wavelets.shape)
         
         mat_file_path = os.path.join(animal_folder, "UMAP2D.mat")
-        if os.path.exists(mat_file_path):
+        if os.path.exists(mat_file_path) and overwrite == False:
             embedded2ddata = loadmat(mat_file_path)["data"]
         else:
             embedded2ddata = self.umapmodel.inference(wavelets)
@@ -85,7 +86,7 @@ class MotionMapperInference():
         draw_plot(embedded2ddata, animalRFID, animal_folder, sigma=sigma)
     
         mat_file_path = os.path.join(animal_folder, "WATERSHEDREGIONS.mat")
-        if os.path.exists(mat_file_path):
+        if os.path.exists(mat_file_path) and overwrite == False:
             watershedRegions = loadmat(mat_file_path)["data"]
         else:
             watershedRegions = get_watershed_regions(embedded2ddata, self.watershed_file_path, self.BEHAVIOR_LABELED_LOOK_UP_TABLE_INVERTED)
@@ -104,7 +105,7 @@ class MotionMapperInference():
             assert len(encoded_pose_data_batched) == len(wavelets_batched) == len(embedded2ddata_batched) == len(watershedRegions_batched) == len(mat_files_used)
             
             for i in tqdm(range(len(per_trial_length)), desc="\tSaving MotionMapper data", disable=disable_progressbar):
-                mat_file = linux2windowspath(mat_files_used[i])
+                mat_file = ChenLabPyLib.chenlab_filepaths(paths=mat_files_used[i])
                 matdata = loadmat(mat_file)
                 matdata["encoded_egocentricwTM"] = encoded_pose_data_batched[i]
                 matdata["wavelets"] = wavelets_batched[i]
@@ -112,7 +113,7 @@ class MotionMapperInference():
                 matdata["watershedregions"] = watershedRegions_batched[i]
                 matdata["umap_model_path"] = self.umap_model_path
                 matdata["autoencoder_model_path"] = self.auto_encoder_model_path
-                matdata["motion_mapper_analyzed"] = "motion_mapper_v1"
+                matdata["motion_mapper_analyzed_ver"] = self.version
                 matdata["motion_mapper_analyzed_date"] = datetime.datetime.today()
                 savemat(mat_file, matdata)
                 os.chmod(mat_file, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
