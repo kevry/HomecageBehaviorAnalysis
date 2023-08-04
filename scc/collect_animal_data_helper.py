@@ -66,7 +66,7 @@ if __name__ == "__main__":
     os.makedirs(json_folder, exist_ok=True)
 
     # create json file name 
-    json_file_name = 'animal_list_{}.json'.format(str(batch_size))
+    json_file_name = 'animals_n{}_b{}.json'.format(str(len(animal_list)), str(batch_size))
 
     json_file_path = os.path.join(json_folder, json_file_name)
     with open(json_file_path, "w") as outfile:
