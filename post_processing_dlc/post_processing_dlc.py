@@ -53,7 +53,12 @@ class PostAnalysisDLC():
         # get list of mat files
         trial_data = pd.read_csv(csv_path).values
         mat_file_list = [trial[1] for trial in trial_data]
-        print("\tNumber of mat files in FOUND_TRIALS.csv:", len(mat_file_list))
+        
+        if len(mat_file_list) > 0:
+            print("\tNumber of mat files in FOUND_TRIALS.csv:", len(mat_file_list))
+        else:
+            print("\tNo mat files found in FOUND_TRIALS.csv. Skipping")
+            raise ValueError("No mat files found for animal!")
 
         # read all individual mat files
         RAW_SUBJECT_DATA = []
