@@ -114,9 +114,10 @@ if __name__ == "__main__":
             mat_files_used=mat_files_used,
             animalRFID=animalRFID, 
             animal_folder=animal_folder,
-            sigma=cfg['motion_mapper_inference_params']['sigma'],
+            overwrite=cfg['motion_mapper_inference_params']['overwrite'],
             save_progress=cfg['motion_mapper_inference_params']['save_progress'],
             save2trialmat=cfg['motion_mapper_inference_params']['save2trialmat'],
+            sigma=cfg['motion_mapper_inference_params']['sigma'],
             disable_progressbar=cfg['motion_mapper_inference_params']['disable_progressbar'],
         )
         
