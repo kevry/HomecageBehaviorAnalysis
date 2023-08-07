@@ -52,6 +52,7 @@ class MotionMapperInference():
         print("Running MotionMapper inference.")
         mat_file_path = os.path.join(animal_folder, "ENCODED_POSE_DATA.mat")
         if os.path.exists(mat_file_path) and overwrite == False:
+            print("\tUsing previously run data")
             encoded_pose_data = loadmat(mat_file_path)["data"]
         else:
             encoded_pose_data = self.encoder.inference(pose_data)
@@ -63,6 +64,7 @@ class MotionMapperInference():
         
         mat_file_path = os.path.join(animal_folder, "WAVELETS.mat")
         if os.path.exists(mat_file_path) and overwrite == False:
+            print("\tUsing previously run data")
             wavelets = loadmat(mat_file_path)["data"]
         else:
             wavelets = wavelet_transform(encoded_pose_data, per_trial_length, parameters)
@@ -74,6 +76,7 @@ class MotionMapperInference():
         
         mat_file_path = os.path.join(animal_folder, "UMAP2D.mat")
         if os.path.exists(mat_file_path) and overwrite == False:
+            print("\tUsing previously run data")
             embedded2ddata = loadmat(mat_file_path)["data"]
         else:
             embedded2ddata = self.umapmodel.inference(wavelets)
@@ -87,7 +90,8 @@ class MotionMapperInference():
     
         mat_file_path = os.path.join(animal_folder, "WATERSHEDREGIONS.mat")
         if os.path.exists(mat_file_path) and overwrite == False:
-            watershedRegions = loadmat(mat_file_path)["data"]
+            print("\tUsing previously run data")
+            watershedRegions = loadmat(mat_file_path)["data"].T
         else:
             watershedRegions = get_watershed_regions(embedded2ddata, self.watershed_file_path, self.BEHAVIOR_LABELED_LOOK_UP_TABLE_INVERTED)
             if save_progress:
@@ -97,6 +101,7 @@ class MotionMapperInference():
         print("\tWatershedRegions dim:", watershedRegions.shape)
         
         if save2trialmat:
+            print("Saving data to respective .mat trials.")
             # breakup data based on per_trial_length
             encoded_pose_data_batched = np.split(encoded_pose_data, np.cumsum(per_trial_length)[:-1])
             wavelets_batched = np.split(wavelets, np.cumsum(per_trial_length)[:-1])
