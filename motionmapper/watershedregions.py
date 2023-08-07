@@ -28,4 +28,4 @@ def get_watershed_regions(embedded2ddata, watershed_file_path, behavior_labeled_
         else:
             wshedLabelGlobal = int(behavior_labeled_look_up_table_inverted[str(wshedLabel)])
         watershedRegionsSimplified.append(wshedLabelGlobal)
-    return np.array(watershedRegionsSimplified)
+    return np.array(watershedRegionsSimplified).reshape((-1, 1))
