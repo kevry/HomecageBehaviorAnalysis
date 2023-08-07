@@ -91,7 +91,7 @@ class MotionMapperInference():
         mat_file_path = os.path.join(animal_folder, "WATERSHEDREGIONS.mat")
         if os.path.exists(mat_file_path) and overwrite == False:
             print("\tUsing previously run data")
-            watershedRegions = loadmat(mat_file_path)["data"].T
+            watershedRegions = loadmat(mat_file_path)["data"]
         else:
             watershedRegions = get_watershed_regions(embedded2ddata, self.watershed_file_path, self.BEHAVIOR_LABELED_LOOK_UP_TABLE_INVERTED)
             if save_progress:
