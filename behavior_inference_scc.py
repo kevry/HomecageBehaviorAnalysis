@@ -12,7 +12,7 @@ import sys
 import time
 import yaml
 
-import ChenLabPyLib
+import chenlabpylib
 
 def get_args():
     """ gets arguments from command line """
@@ -44,19 +44,19 @@ if __name__ == "__main__":
     
     # create instance of MotionMapperInference object
     mminfer = MotionMapperInference(
-        umap_model_path = ChenLabPyLib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["umap_model_path"]), 
-        auto_encoder_model_path = ChenLabPyLib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["auto_encoder_model_path"]), 
-        scaling_parameters_path = ChenLabPyLib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["scaling_parameters_path"]),
-        look_up_table_path = ChenLabPyLib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["look_up_table_path"]),
-        watershed_file_path = ChenLabPyLib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["watershed_file_path"]),
+        umap_model_path = chenlabpylib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["umap_model_path"]), 
+        auto_encoder_model_path = chenlabpylib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["auto_encoder_model_path"]), 
+        scaling_parameters_path = chenlabpylib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["scaling_parameters_path"]),
+        look_up_table_path = chenlabpylib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["look_up_table_path"]),
+        watershed_file_path = chenlabpylib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["watershed_file_path"]),
         version=cfg['motion_mapper_version']
     )
     
     # create instance of Post-Process DLC object
     postdlc = PostAnalysisDLC(
-        nose2tail_ae_path = ChenLabPyLib.chenlab_filepaths(path = cfg["post_processing_dlc_paths"]["nose2tail_ae_path"]), 
-        feet_ae_path = ChenLabPyLib.chenlab_filepaths(path = cfg["post_processing_dlc_paths"]["feet_ae_path"]), 
-        all_ae_path = ChenLabPyLib.chenlab_filepaths(path = cfg["post_processing_dlc_paths"]["all_ae_path"])
+        nose2tail_ae_path = chenlabpylib.chenlab_filepaths(path = cfg["post_processing_dlc_paths"]["nose2tail_ae_path"]), 
+        feet_ae_path = chenlabpylib.chenlab_filepaths(path = cfg["post_processing_dlc_paths"]["feet_ae_path"]), 
+        all_ae_path = chenlabpylib.chenlab_filepaths(path = cfg["post_processing_dlc_paths"]["all_ae_path"])
     )
     
     start_time = time.time()
@@ -75,7 +75,7 @@ if __name__ == "__main__":
         print("Analyzing", animalRFID)
         
         # animal folder
-        animal_folder = os.path.join(ChenLabPyLib.chenlab_filepaths(path = cfg["processing_folder"]), animalRFID)
+        animal_folder = os.path.join(chenlabpylib.chenlab_filepaths(path = cfg["processing_folder"]), animalRFID)
         
         # queried trial data from datajoint
         found_trials_csv_path = os.path.join(animal_folder, "FOUND_TRIALS.csv")

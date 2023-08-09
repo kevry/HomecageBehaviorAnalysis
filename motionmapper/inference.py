@@ -20,7 +20,7 @@ from motionmapper.embed2d import Embed2DUMAP
 from motionmapper.watershedregions import get_watershed_regions
 from motionmapper.draw_plot import draw_plot
 
-import ChenLabPyLib
+import chenlabpylib
 
 
 class MotionMapperInference():
@@ -110,7 +110,7 @@ class MotionMapperInference():
             assert len(encoded_pose_data_batched) == len(wavelets_batched) == len(embedded2ddata_batched) == len(watershedRegions_batched) == len(mat_files_used)
             
             for i in tqdm(range(len(per_trial_length)), desc="\tSaving MotionMapper data", disable=disable_progressbar):
-                mat_file = ChenLabPyLib.chenlab_filepaths(path=mat_files_used[i])
+                mat_file = chenlabpylib.chenlab_filepaths(path=mat_files_used[i])
                 matdata = loadmat(mat_file)
                 matdata["encoded_egocentricwTM"] = encoded_pose_data_batched[i]
                 matdata["wavelets"] = wavelets_batched[i]

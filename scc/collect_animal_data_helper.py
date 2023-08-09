@@ -12,7 +12,7 @@ import subprocess
 import sys
 import yaml
 
-import ChenLabPyLib
+import chenlabpylib
 
 def get_args():
     """ gets arguments from command line """
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     animal_list = [str(animalRFID)for animalRFID in cfg["animal_list"]] 
     
     # get processing folder
-    processing_folder = ChenLabPyLib.chenlab_filepaths(path=cfg["processing_folder"])
+    processing_folder = chenlabpylib.chenlab_filepaths(path=cfg["processing_folder"])
     
     if len(animal_list) <= 0:
         raise ValueError("No animals listed in configuration file.")
@@ -87,7 +87,7 @@ if __name__ == "__main__":
     # submit job
     subprocess.run(["qsub", 
         "-t", "1-{}".format(str(num_of_jobs)), 
-        "-tc", "40", 
+        "-tc", "2", 
         "-o", log_folder,
         "-e", log_folder,
         "behavior_job.sh", 
