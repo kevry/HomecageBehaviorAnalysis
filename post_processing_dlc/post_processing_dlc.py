@@ -139,8 +139,14 @@ class PostAnalysisDLC():
     
         # save post-analyzed data
         npz_file_path = os.path.join(animal_folder, "POST_ANALYZED_DLC.npz")
-        np.savez(npz_file_path, data=SUBJECT_DATA, per_trial_length=NUM_OF_FRAMES_PER_TRIAL, 
-                  mat_files=MAT_FILES_USED, raw=RAW_SUBJECT_DATA, conf=RAW_SUBJECT_CONFIDENCE)
+        np.savez(npz_file_path, 
+                 data=SUBJECT_DATA, 
+                 per_trial_length=NUM_OF_FRAMES_PER_TRIAL, 
+                 mat_files=MAT_FILES_USED, 
+                 raw=RAW_SUBJECT_DATA, 
+                 conf=RAW_SUBJECT_CONFIDENCE,
+                 start_end_indexes=PROCESSED_START_END_INDEXES_PER_TRIAL
+        )
         os.chmod(npz_file_path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
         print("\tCreated POST_ANALYZED_DLC.npz file for {}!".format(animalRFID))
         return npz_file_path
