@@ -42,6 +42,27 @@ if __name__ == "__main__":
         except yaml.YAMLError as exc:
             sys.exit(exc)
     
+    
+    if sys.platform == 'linux': # assume running on SCC
+        # load in JSON file
+        f = open(os.path.join(os.getcwd(), "scc", "jsons", json_file_name))
+        data = json.load(f)
+        f.close()
+     
+        task_id = int(os.environ["SGE_TASK_ID"])
+        animalRFIDlist = [str(animalRFID)for animalRFID in data[task_id-1]] # make sure all RFIDs are strings
+        
+    else: # running on local Windows lab computers
+        # import datajoint and credentials only if running on Windows
+        import datajoint as dj
+        dj.config['database.host'] = cfg["datajoint_credentials"]['host']
+        dj.config['database.user'] = cfg["datajoint_credentials"]['user']
+        dj.config['database.password'] = cfg["datajoint_credentials"]['password']
+        from database.extract_trials_datajoint import extract_trials_datajoint
+        
+        animalRFIDlist = [str(animalRFID)for animalRFID in cfg["animal_list"]] # make sure all RFIDs are strings
+        
+        
     # create instance of MotionMapperInference object
     mminfer = MotionMapperInference(
         umap_model_path = chenlabpylib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["umap_model_path"]), 
@@ -62,20 +83,21 @@ if __name__ == "__main__":
     start_time = time.time()
     
     # %% Animal information
-    
-    # load in JSON file
-    f = open(os.path.join(os.getcwd(), "scc", "jsons", json_file_name))
-    data = json.load(f)
-    f.close()
- 
-    task_id = int(os.environ["SGE_TASK_ID"])
-    animalRFIDlist = [str(animalRFID)for animalRFID in data[task_id-1]] # make sure all RFIDs are strings
-    
+
     for animalRFID in animalRFIDlist:
         print("Analyzing", animalRFID)
         
         # animal folder
         animal_folder = os.path.join(chenlabpylib.chenlab_filepaths(path = cfg["processing_folder"]), animalRFID)
+        
+        # Get all trials from respective animal on DataJoint
+        os.makedirs(animal_folder, exist_ok=True)
+        found_trials_csv_path = extract_trials_datajoint(
+            animalRFID=animalRFID, 
+            animal_folder=animal_folder,
+            save_missing_trials=True, 
+            overwrite=True
+        )
         
         # queried trial data from datajoint
         found_trials_csv_path = os.path.join(animal_folder, "FOUND_TRIALS.csv")
