@@ -5,11 +5,29 @@
 processing_folder: Z:\Dropbox\Chen Lab Dropbox\Chen Lab Team Folder\Projects\Home_Cage_Training\DeepLabCut\BehaviorModels\VERSION1\Animals
 
 
+# whether to only run the datajoint part of the script for querying all trials from the lab database (run only on Windows)
+only_run_datajoint: False
+
 # Credentials for the Chenlab DataJoint database (if running on SCC, ignore)
 datajoint_credentials:
   host: None
   user: None
   password: None
+
+
+# Add full paths to each model and files used by the post processing DeepLabCut code
+post_processing_dlc_paths:
+  nose2tail_ae_path: Z:\Dropbox\Chen Lab Dropbox\Chen Lab Team Folder\Projects\Home_Cage_Training\DeepLabCut\Autoencoders\VERSION1\tm_nose_2_tail_markers_ae.h5
+  feet_ae_path: Z:\Dropbox\Chen Lab Dropbox\Chen Lab Team Folder\Projects\Home_Cage_Training\DeepLabCut\Autoencoders\VERSION1\tm_feet_markers_ae.h5
+  all_ae_path: Z:\Dropbox\Chen Lab Dropbox\Chen Lab Team Folder\Projects\Home_Cage_Training\DeepLabCut\Autoencoders\VERSION1\all_tm_markers_ae.h5
+
+post_processing_dlc_params:
+  # whether overwrite data if previously run
+  overwrite: True
+  # whether to save post analyzed dlc data to respective trial .mat files
+  save2trialmat: True
+  # disable tqdm progress bar from printing
+  disable_progressbar: True
 
 
 # version of motion mapper model used
@@ -35,21 +53,6 @@ motion_mapper_inference_params:
   # disable tqdm progress bar from printing
   disable_progressbar: True
   
-
-# Add full paths to each model and files used by the post processing DeepLabCut code
-post_processing_dlc_paths:
-  nose2tail_ae_path: Z:\Dropbox\Chen Lab Dropbox\Chen Lab Team Folder\Projects\Home_Cage_Training\DeepLabCut\Autoencoders\VERSION1\tm_nose_2_tail_markers_ae.h5
-  feet_ae_path: Z:\Dropbox\Chen Lab Dropbox\Chen Lab Team Folder\Projects\Home_Cage_Training\DeepLabCut\Autoencoders\VERSION1\tm_feet_markers_ae.h5
-  all_ae_path: Z:\Dropbox\Chen Lab Dropbox\Chen Lab Team Folder\Projects\Home_Cage_Training\DeepLabCut\Autoencoders\VERSION1\all_tm_markers_ae.h5
-
-post_processing_dlc_params:
-  # whether overwrite data if previously run
-  overwrite: True
-  # whether to save post analyzed dlc data to respective trial .mat files
-  save2trialmat: True
-  # disable tqdm progress bar from printing
-  disable_progressbar: True
-
   
 # IMPORTANT NOTE:
 # For running on SCC:
