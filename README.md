@@ -1,43 +1,80 @@
-# Homecage Behavior Analysis for whisker-based task
-Using DeepLabCut pose data to quantify behavior with the MotionMapper algorithm
-
-Download the contents of this repository to your local directory by either manually downloading it or using git clone:
-
-`git clone https://github.com/kevry/HomecageBehaviorAnalysis.git`
+# Behavioral Analysis for the homecage data
+Using the DeepLabCut pose data, running behavioral analysis with MotionMapper to extract behavior
+1. https://github.com/DeepLabCut/DeepLabCut
+2. https://github.com/bermanlabemory/motionmapperpy
 
 ## Installing dependencies
-To run these scripts, you will need to have Python installed as well as a virtual environment with all the necessary libraries/dependencies You can do this with either Anaconda(conda) or traditional Python(pip) depending on if your system already has Anaconda installed. 
+Make sure you have a virtual environment setup before installing all dependencies. You can do this with either Anaconda(conda) or traditional Python(pip). 
 
-To install using [Anaconda](https://docs.anaconda.com/free/anaconda/install/windows/):
+## Pipeline
+The overall analysis is broken up into 3 steps:
 
-`cd <repo>/environments`
+1. Query trial data from DataJoint
+2. Run Behavioral Analysis (PostProcessing DLC and MotionMapper inference)
+3. Store analyzed data into its respective trial .mat files
 
-`conda env create -f conda-env.yml`
+## Configuration
+All the parameters used throughout the process are contained in the config.yaml file. You can look at template_config.yaml for an example of how a config file should be and what each parameter does. Make a copy of the template_config.yaml file and modify this file.
 
-`conda activate homecagebehaviorENV`
+Edit any parameters in the config file depending on your criteria.
 
-To install using pip:
+## Running Analysis
 
-`cd <repo>/environments`
+### Step 1: Query data from DataJoint
+The initial step of the process is gathering all data from DataJoint and saving its contents into a CSV file. Note, this step can only be done on local Windows machines in the lab since we aren't able to open SSH tunnels on any SCC compute nodes. 
 
-`pip install virtualenv`(if you don't already have virtualenv installed)
+Important parameters to set in your config file:
+1. `processing_folder`
+2. `datajoint_credentials` 
+3. `only_run_datajoint`
+4. `animal_list`. 
 
-`virtualenv homecagebehaviorENV`(to create your new Python environment)
+**How to run**:
+1. Go to ``<repo_directory>``
+2. ``python behavior_inference.py --config_file_name <name of your config file>.yaml``
 
-`source homecagebehaviorENV/bin/activate.bat`(to enter the virtual environment)
-
-`pip install -r requirements.txt`(to install the requirements in your current env)
+The script will go through each animal in your <animal_list>, create an animal folder for the specific animal in the <processing_folder> and create a CSV file called _FOUND_TRIALS.csv_ with a list of file paths to all trial .mat files that belong to that animal.
 
 
-## Running script
-Here are the following arguments needed to run the analysis:
-1. The animal RFID
+### Step 2: PostProcessing DLC and MotionMapper Inference
+The next step is running the behavioral analysis given the list of trials collected by the previous step. For improved speedup, we will use the SCC. 
 
-You can run the script on the command prompt by entering:
+Important parameters to set in your config file:
+1. `processing_folder`
+2. `post_processing_dlc_paths`
+3. `post_processing_dlc_params`
+4. `motion_mapper_version`
+5. `motion_mapper_file_paths` 
+6. `motion_mapper_inference_params`
+7. `animal_list`
 
-`python behavior_inference.py --rfid AAOKWE23231MD`
+**How to run on the SCC**
+1. Log in to SCC
+2. Go to ``<repo_directory>/scc``
+3. ``qsub run_behavior_job_array.sh <name of your config file>.yaml``
 
-## Dependencies
-https://github.com/bermanlabemory/motionmapperpy
+**How to run on Windows**
+1. Go to ``<repo_directory>``
+2. ``python behavior_inference.py --config_file_name <name of your config file>.yaml``
 
-https://github.com/DeepLabCut/DeepLabCut
+
+### Step 3: Storing data to trial mat files
+The final step is saving all the data collected into each trial's respective .mat file. 
+
+Important parameters to set in your config file:
+1. `processing_folder`
+2. `post_processing_dlc_paths`
+3. `post_processing_dlc_params`
+4. `motion_mapper_version`
+5. `motion_mapper_file_paths` 
+6. `motion_mapper_inference_params`
+7. `animal_list`
+
+**How to run on the SCC**
+1. Log in to SCC
+2. Go to ``<repo_directory>/scc``
+3. ``qsub store_behavior_job_array.sh <name of your config file>.yaml``
+
+**How to run on Windows**
+1. Go to ``<repo_directory>``
+2. ``python store_behavior_data.py --config_file_name <name of your config file>.yaml``
