@@ -14,9 +14,7 @@ The overall analysis is broken up into 3 steps:
 3. Store analyzed data into its respective trial .mat files
 
 ## Configuration
-All the parameters used throughout the process are contained in the config.yaml file. You can look at template_config.yaml for an example of how a config file should be and what each parameter does. Make a copy of the template_config.yaml file and modify this file.
-
-Edit any parameters in the config file depending on your criteria.
+All the parameters used throughout the process are contained in the config.yaml file. Use [template_config.yaml](configs/template_config.yaml) as an example of what parameters to modify and understand what each does. Make a copy of the [template_config.yaml](configs/template_config.yaml) file and modify this file instead of the template.
 
 ## Running Analysis
 
@@ -57,9 +55,10 @@ Important parameters to set in your config file:
 1. Go to ``<repo_directory>``
 2. ``python behavior_inference.py --config_file_name <name of your config file>.yaml``
 
+This script will run the behavioral analysis for each animal in <animal_list> and save intermediate files (_WAVELETS.mat_, _HEATMAP.png_, etc...) in their respective animal folder throughout the analysis.
 
 ### Step 3: Storing data to trial mat files
-The final step is saving all the data collected into each trial's respective .mat file. 
+The final step is to use all the intermediate files generated to save the contents into each trial's respective .mat file. 
 
 Important parameters to set in your config file:
 1. `processing_folder`
