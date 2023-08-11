@@ -21,7 +21,7 @@ def get_args():
         epilog="python file.py --config_file_path configs/config_test.yaml"
     )
     # required argument
-    parser.add_argument("--json_file_name", '-jfp', required=True, help='Name of json file with animal list')
+    parser.add_argument("--json_file_name", '-jfp', required=False, help='Name of json file with animal list')
     parser.add_argument("--config_file_name", '-cfg', required=True, help='Name of config file with configurations')
     args = parser.parse_args()
     return args.json_file_name, args.config_file_name

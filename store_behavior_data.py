@@ -28,7 +28,7 @@ def get_args():
         epilog="python file.py --config_file_path configs/config_test.yaml"
     )
     # required argument
-    parser.add_argument("--json_file_name", '-jfp', required=True, help='Name of json file with animal list')
+    parser.add_argument("--json_file_name", '-jfp', required=False, help='Name of json file with animal list')
     parser.add_argument("--config_file_name", '-cfg', required=True, help='Name of config file with configurations')
     args = parser.parse_args()
     return args.json_file_name, args.config_file_name
@@ -51,16 +51,22 @@ if __name__ == "__main__":
     
     animal_folder_list = glob.glob(os.path.join(processing_folder, "*"))
     
-    # load in JSON file
-    f = open(os.path.join(os.getcwd(), "scc", "jsons", json_file_name))
-    animal_rig_dict = json.load(f)
-    f.close()
+    if sys.platform == 'linux': # assume running on SCC
+        # load in JSON file
+        f = open(os.path.join(os.getcwd(), "scc", "jsons", json_file_name))
+        animal_rig_dict = json.load(f)
+        f.close()
+            
+        task_id = int(os.environ["SGE_TASK_ID"])
+        training_module_id = list(animal_rig_dict.keys())[task_id]
+        animalRFIDlist = animal_rig_dict[training_module_id]
+        print("Saving data for training module:", training_module_id)
         
-    TASK_ID = 0
-    training_module_id = list(animal_rig_dict.keys())[TASK_ID]
-    print("Saving data for training module:", training_module_id)
-    
-    for anm_idx, animal in enumerate(animal_rig_dict[training_module_id]):
+    else: # running on local Windows lab computers
+        animalRFIDlist = [str(animalRFID)for animalRFID in cfg["animal_list"]] # make sure all RFIDs are strings
+        
+    # %% Store animal data    
+    for anm_idx, animal in enumerate(animalRFIDlist):
         animal_folder = os.path.join(processing_folder, animal)
     
         subject_name = os.path.basename(animal_folder)
