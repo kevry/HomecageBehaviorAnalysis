@@ -89,21 +89,26 @@ if __name__ == "__main__":
         
         # animal folder
         animal_folder = os.path.join(chenlabpylib.chenlab_filepaths(path = cfg["processing_folder"]), animalRFID)
-        
-        # Get all trials from respective animal on DataJoint
-        os.makedirs(animal_folder, exist_ok=True)
-        found_trials_csv_path = extract_trials_datajoint(
-            animalRFID=animalRFID, 
-            animal_folder=animal_folder,
-            save_missing_trials=True, 
-            overwrite=True
-        )
-        
-        # queried trial data from datajoint
-        found_trials_csv_path = os.path.join(animal_folder, "FOUND_TRIALS.csv")
+          
+        # only run when on Windows
+        if sys.platform.startswith('win'):
+            # Get all trials from respective animal on DataJoint
+            os.makedirs(animal_folder, exist_ok=True)
+            found_trials_csv_path = extract_trials_datajoint(
+                animalRFID=animalRFID, 
+                animal_folder=animal_folder,
+                save_missing_trials=True, 
+                overwrite=True
+            )
+        else: # assume .csv with queried data is already collected
+            found_trials_csv_path = os.path.join(animal_folder, "FOUND_TRIALS.csv")
         
         if not os.path.exists(found_trials_csv_path):
             print("FOUND_TRIALS.csv does not exist for {}. Skipping to next".format(animalRFID))
+            continue
+        
+        # skip rest of behavioral analysis if True
+        if cfg["only_run_datajoint"] == True:
             continue
     
         # %% Post-Processing DeepLabCut data for downstream behavior analysis
