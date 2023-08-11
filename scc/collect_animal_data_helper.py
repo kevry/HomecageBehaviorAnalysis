@@ -87,7 +87,7 @@ if __name__ == "__main__":
     # submit job
     subprocess.run(["qsub", 
         "-t", "1-{}".format(str(num_of_jobs)), 
-        "-tc", "2", 
+        "-tc", "40", 
         "-o", log_folder,
         "-e", log_folder,
         "behavior_job.sh", 
