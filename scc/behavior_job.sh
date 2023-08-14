@@ -30,5 +30,5 @@ config_file_name=$2
 
 #run main python script
 cd ..
-python behavior_inference_scc.py --json_file_name $json_file_name --config_file_name $config_file_name
+python behavior_inference.py --json_file_name $json_file_name --config_file_name $config_file_name
 exit
