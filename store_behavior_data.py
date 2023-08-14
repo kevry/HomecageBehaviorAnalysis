@@ -60,10 +60,11 @@ if __name__ == "__main__":
         task_id = int(os.environ["SGE_TASK_ID"])
         training_module_id = list(animal_rig_dict.keys())[task_id]
         animalRFIDlist = animal_rig_dict[training_module_id]
-        print("Saving data for training module:", training_module_id)
+        print("Storing data for training module:", training_module_id)
         
     else: # running on local Windows lab computers
         animalRFIDlist = [str(animalRFID)for animalRFID in cfg["animal_list"]] # make sure all RFIDs are strings
+        print("Storing data for all animals in config.")
         
     # %% Store animal data    
     for anm_idx, animal in enumerate(animalRFIDlist):

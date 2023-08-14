@@ -22,4 +22,3 @@ config_file_name=$1
 #run main python script
 python store_animal_data_helper.py --config_file_name $config_file_name
 exit
-

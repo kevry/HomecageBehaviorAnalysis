@@ -40,12 +40,23 @@ if __name__ == "__main__":
             
     processing_folder = cfg["processing_folder"]
 
-    animal_folder_list = glob.glob(os.path.join(processing_folder, "*"))
+    # get animal list from cfg file
+    animal_list = [str(animalRFID)for animalRFID in cfg["animal_list"]] 
+    
+    # get processing folder
+    processing_folder = chenlab_filepaths(path=cfg["processing_folder"])
+    
+    if len(animal_list) <= 0:
+        raise ValueError("No animals listed in configuration file.")
+    
+    if animal_list[0] == "all":
+        print("Using all animals in {}".format(processing_folder))
+        animal_list = os.listdir(processing_folder)
     
     # split animals based on rig number
     animal_rig_dict = {}
-    for animal_folder in animal_folder_list:
-        subject_name = os.path.basename(animal_folder)
+    for animalRFID in animal_list:
+        animal_folder = os.path.join(processing_folder, animalRFID)
         found_trials_csv_file = os.path.join(animal_folder, "FOUND_TRIALS.csv")
         trial_data = pd.read_csv(found_trials_csv_file).values
         full_mat_file_list = [chenlab_filepaths(path=trial[1]) for trial in trial_data]
@@ -53,10 +64,10 @@ if __name__ == "__main__":
         if training_module_id not in animal_rig_dict.keys():
             animal_rig_dict[training_module_id] = []
         
-        animal_rig_dict[training_module_id].append(subject_name)
+        animal_rig_dict[training_module_id].append(animalRFID)
         
     num_of_jobs = len(animal_rig_dict.keys())
-    num_of_animals = len(animal_folder_list)
+    num_of_animals = len(animal_list)
     
     print("Number of animals in JSON:", num_of_animals)
     print("Number of jobs to run:", num_of_jobs)
