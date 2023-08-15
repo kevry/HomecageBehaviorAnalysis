@@ -54,9 +54,12 @@ if __name__ == "__main__":
     if animal_list[0] == "all":
         print("Using all animals in {}".format(processing_folder))
         animal_list = os.listdir(processing_folder)
-    
+        
     # separate list of videos in chunks
     animal_list_chunked = [animal_list[i*batch_size:(i+1)*batch_size] for i in range((len(animal_list)+batch_size-1)//batch_size)]
+    
+    num_of_animals = len(animal_list)
+    num_of_jobs = len(animal_list_chunked)
 
     # save list to JSON file
     json_obj = json.dumps(animal_list_chunked)
@@ -73,8 +76,6 @@ if __name__ == "__main__":
         outfile.write(json_obj)
     print("{} created.".format(json_file_path))
     json_file_name = os.path.basename(json_file_path)
-    
-    num_of_jobs = len(animal_list_chunked)
     
     # number of paths in json
     print('Number of animals in json:', len(animal_list))
