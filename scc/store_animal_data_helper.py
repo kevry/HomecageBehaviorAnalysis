@@ -7,7 +7,6 @@ Split up animals that went through behavioral analysis by rig number to save dat
 
 import argparse
 from chenlabpylib import chenlab_filepaths
-import glob
 import json
 import pandas as pd
 import os

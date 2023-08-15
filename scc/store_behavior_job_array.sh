@@ -7,18 +7,17 @@
 #$ -P jchenlab
 
 #number of cores to select
-#$ -pe omp 16
+#$ -pe omp 4
 
 #specify the time limit
 #$ -l h_rt=12:00:00
+
+#path to configuration file
+config_file_name=$1
 
 #activate conda environment
 module load miniconda
 conda activate homecagebehaviorENV
 
-#configuration file path
-config_file_name=$1
-
-#run main python script
 python store_animal_data_helper.py --config_file_name $config_file_name
 exit

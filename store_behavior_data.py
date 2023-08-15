@@ -8,7 +8,6 @@ Split up animals that went through behavioral analysis by rig number to save dat
 import argparse
 from chenlabpylib import chenlab_filepaths, send_slack_notification
 import datetime
-import glob
 import json
 import numpy as np
 import os
@@ -44,12 +43,12 @@ if __name__ == "__main__":
         except yaml.YAMLError as exc:
             sys.exit(exc)
     
-    processing_folder = cfg["processing_folder"]    
+    # get processing folder
+    processing_folder = chenlab_filepaths(path=cfg["processing_folder"])
+    
     version = cfg["motion_mapper_version"]
     auto_encoder_model_path = cfg["motion_mapper_file_paths"]["auto_encoder_model_path"]
     umap_model_path = cfg["motion_mapper_file_paths"]["umap_model_path"]
-    
-    animal_folder_list = glob.glob(os.path.join(processing_folder, "*"))
     
     if sys.platform == 'linux': # assume running on SCC
         # load in JSON file
@@ -58,7 +57,7 @@ if __name__ == "__main__":
         f.close()
             
         task_id = int(os.environ["SGE_TASK_ID"])
-        training_module_id = list(animal_rig_dict.keys())[task_id]
+        training_module_id = list(animal_rig_dict.keys())[task_id-1]
         animalRFIDlist = animal_rig_dict[training_module_id]
         print("Storing data for training module:", training_module_id)
         
@@ -71,7 +70,7 @@ if __name__ == "__main__":
         animal_folder = os.path.join(processing_folder, animal)
     
         subject_name = os.path.basename(animal_folder)
-        print("{}/{}:".format(str(anm_idx+1), str(len(animal_folder_list))), subject_name)
+        print("{}/{}:".format(str(anm_idx+1), str(len(animalRFIDlist))), subject_name)
         
         found_trials_csv_file = os.path.join(animal_folder, "FOUND_TRIALS.csv")
         post_analyzed_dlc_file = os.path.join(animal_folder, "POST_ANALYZED_DLC.npz")
