@@ -67,9 +67,6 @@ if __name__ == "__main__":
         
     num_of_jobs = len(animal_rig_dict.keys())
     num_of_animals = len(animal_list)
-    
-    print("Number of animals in JSON:", num_of_animals)
-    print("Number of jobs to run:", num_of_jobs)
         
     # save list to JSON file
     json_obj = json.dumps(animal_rig_dict)
@@ -85,6 +82,9 @@ if __name__ == "__main__":
     with open(json_file_path, "w") as outfile:
         outfile.write(json_obj)
     print("{} created.".format(json_file_path))
+    
+    print("Number of animals in json:", num_of_animals)
+    print("Number of jobs to run:", num_of_jobs)
     
     # create path to log folder
     log_folder = os.path.join(os.getcwd(), "log")
