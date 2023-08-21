@@ -30,9 +30,6 @@ def get_args():
 # %%
 if __name__ == "__main__":
     
-    from post_processing_dlc.post_processing_dlc import PostAnalysisDLC
-    from motionmapper.inference import MotionMapperInference
-    
     # get configuration file path
     json_file_name, config_file_name = get_args()
     
@@ -61,25 +58,30 @@ if __name__ == "__main__":
         from database.extract_trials_datajoint import extract_trials_datajoint
         
         animalRFIDlist = [str(animalRFID)for animalRFID in cfg["animal_list"]] # make sure all RFIDs are strings
+       
+    # ignore initializing motionmapperinference and postanalysisdlc if only running datajoint query    
+    if cfg["only_run_datajoint"] == False: 
         
+        from post_processing_dlc.post_processing_dlc import PostAnalysisDLC
+        from motionmapper.inference import MotionMapperInference
         
-    # create instance of MotionMapperInference object
-    mminfer = MotionMapperInference(
-        umap_model_path = chenlabpylib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["umap_model_path"]), 
-        auto_encoder_model_path = chenlabpylib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["auto_encoder_model_path"]), 
-        scaling_parameters_path = chenlabpylib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["scaling_parameters_path"]),
-        look_up_table_path = chenlabpylib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["look_up_table_path"]),
-        watershed_file_path = chenlabpylib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["watershed_file_path"]),
-        version=cfg['motion_mapper_version']
-    )
-    
-    # create instance of Post-Process DLC object
-    postdlc = PostAnalysisDLC(
-        nose2tail_ae_path = chenlabpylib.chenlab_filepaths(path = cfg["post_processing_dlc_paths"]["nose2tail_ae_path"]), 
-        feet_ae_path = chenlabpylib.chenlab_filepaths(path = cfg["post_processing_dlc_paths"]["feet_ae_path"]), 
-        all_ae_path = chenlabpylib.chenlab_filepaths(path = cfg["post_processing_dlc_paths"]["all_ae_path"])
-    )
-    
+        # create instance of MotionMapperInference object
+        mminfer = MotionMapperInference(
+            umap_model_path = chenlabpylib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["umap_model_path"]), 
+            auto_encoder_model_path = chenlabpylib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["auto_encoder_model_path"]), 
+            scaling_parameters_path = chenlabpylib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["scaling_parameters_path"]),
+            look_up_table_path = chenlabpylib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["look_up_table_path"]),
+            watershed_file_path = chenlabpylib.chenlab_filepaths(path = cfg["motion_mapper_file_paths"]["watershed_file_path"]),
+            version=cfg['motion_mapper_version']
+        )
+        
+        # create instance of Post-Process DLC object
+        postdlc = PostAnalysisDLC(
+            nose2tail_ae_path = chenlabpylib.chenlab_filepaths(path = cfg["post_processing_dlc_paths"]["nose2tail_ae_path"]), 
+            feet_ae_path = chenlabpylib.chenlab_filepaths(path = cfg["post_processing_dlc_paths"]["feet_ae_path"]), 
+            all_ae_path = chenlabpylib.chenlab_filepaths(path = cfg["post_processing_dlc_paths"]["all_ae_path"])
+        )
+        
     start_time = time.time()
     
     # %% Animal information
@@ -109,6 +111,7 @@ if __name__ == "__main__":
         
         # skip rest of behavioral analysis if True
         if cfg["only_run_datajoint"] == True:
+            #chenlabpylib.send_slack_notification(message="QUERY DATA FROM DB w/ {} finished".format(animalRFID))
             continue
     
         # %% Post-Processing DeepLabCut data for downstream behavior analysis
